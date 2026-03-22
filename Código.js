@@ -1,4 +1,4 @@
-const SPREADSHEET_ID = '1UOyjQRV7rCuxA6V6N49E6WpZQACLjgBuBHn5NQ4GJEo';
+const SPREADSHEET_ID = 'https://docs.google.com/spreadsheets/d/1UOyjQRV7rCuxA6V6N49E6WpZQACLjgBuBHn5NQ4GJEo/edit?usp=sharing';
 
 function doGet() {
   return HtmlService.createTemplateFromFile('index').evaluate()
