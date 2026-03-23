@@ -6,63 +6,41 @@
     <style>
       :root { --primary-red: #c00000; --bg-main: #fdfaf5; --text-color: #333; --panel-bg: white; }
       body.dark-mode { --bg-main: #222; --text-color: #f0f0f0; --panel-bg: #333; }
-      
-      body { 
-        margin: 0; font-family: 'Segoe UI', sans-serif; background-color: var(--bg-main); 
-        color: var(--text-color); overflow: hidden; transition: 0.5s;
-        display: flex; flex-direction: column; height: 100vh;
-      }
-      
+      body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: var(--bg-main); color: var(--text-color); overflow: hidden; transition: 0.5s; display: flex; flex-direction: column; height: 100vh; }
       .top-bar { background: var(--primary-red); color: white; display: flex; justify-content: space-between; padding: 8px 20px; font-weight: bold; flex-shrink: 0; }
       .nav-tabs { display: flex; background: var(--panel-bg); border-bottom: 1px solid #ddd; justify-content: center; gap: 20px; padding: 10px 0; flex-shrink: 0; }
       .tab { cursor: pointer; opacity: 0.7; padding: 5px 15px; font-weight: 500; }
       .tab.active { opacity: 1; border-bottom: 3px solid var(--primary-red); color: var(--primary-red); }
-
       #screen-Quadro { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
       #quadro-layout { display: flex; flex-grow: 1; overflow: hidden; }
       #sidebar { width: 80px; background: var(--panel-bg); border-right: 1px solid #ddd; display: flex; flex-direction: column; align-items: center; gap: 15px; padding-top: 10px; overflow-y: auto; }
       #canvas-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 15px; background: #eee; overflow: hidden; }
       canvas { border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-
       #right-controls { width: 100px; background: var(--panel-bg); border-left: 1px solid #ddd; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 15px 5px; overflow-y: auto; }
       .side-item { font-size: 24px; cursor: pointer; padding: 8px; border: 1px solid #eee; border-radius: 8px; background: #fff; transition: 0.2s; }
       .side-item:hover { transform: scale(1.1); border-color: var(--primary-red); }
-
       .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
       .color-circle { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; }
       .color-circle.active { border-color: #555; transform: scale(1.1); }
-      
       .phrase-btn { background: var(--panel-bg); color: var(--text-color); border: 1px solid #ccc; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-size: 11px; width: 90%; text-align: center; }
       .action-btn { width: 90%; font-weight: bold; font-size: 10px; padding: 8px 2px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; background: #fff; }
       #phrases-bar { display: flex; justify-content: center; gap: 8px; padding: 10px; background: var(--panel-bg); border-top: 1px solid #ddd; flex-wrap: wrap; flex-shrink: 0; }
-
       .screen-content { display: none; padding: 20px; max-width: 1000px; margin: 0 auto; flex-grow: 1; overflow-y: auto; }
-      
-      /* LAYOUT HANGMAN */
       .game-container { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
       #hangman-canvas { background: white; border-right: 1px solid #eee; padding-right: 15px; }
       #hangman-word-display { font-family: monospace; font-size: 45px; letter-spacing: 12px; font-weight: bold; flex-grow: 1; text-align: center; }
       .keyboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 300px; }
-      
-      /* BOTOES COM ID VISUAL E SOMBRA */
-      .key-btn { 
-        padding: 12px 5px; border: 1px solid #ddd; cursor: pointer; border-radius: 8px; 
-        background: white; font-weight: bold; font-size: 18px; transition: 0.2s;
-        box-shadow: 0 4px 0 #ccc; position: relative; color: var(--text-color);
-      }
+      .key-btn { padding: 12px 5px; border: 1px solid #ddd; cursor: pointer; border-radius: 8px; background: white; font-weight: bold; font-size: 18px; transition: 0.2s; box-shadow: 0 4px 0 #ccc; position: relative; color: var(--text-color); }
       .key-btn:hover { background: #f9f9f9; transform: translateY(-2px); box-shadow: 0 6px 0 #ccc; }
       .key-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #ccc; }
-      
       .mgr-item { display: flex; justify-content: space-between; align-items: center; background: var(--panel-bg); padding: 8px 15px; border-radius: 8px; margin-bottom: 5px; border: 1px solid #eee; width: 100%; box-sizing: border-box; }
     </style>
   </head>
   <body id="main-body">
-
     <div class="top-bar"><span>@dicarvalho.prof</span><span>educação do futuro</span></div>
-
     <div class="nav-tabs">
       <div class="tab active" onclick="switchTab('Quadro', this)">✎ whiteboard</div>
-      <div class="tab" onclick="toggleDarkMode()">🌙 Modo Escuro</div>
+      <div class="tab" onclick="switchTab('Modo-game', this)">🎮 Game mode</div>
     </div>
 
     <div id="screen-Quadro" style="display: flex;">
@@ -101,7 +79,6 @@
       <div style="text-align: center; margin-bottom: 20px;">
         <button class="phrase-btn" style="width:auto; padding: 10px 20px; font-weight:bold; background: var(--primary-red); color: white;" onclick="startHangman()">SORTEAR PALAVRA DO QUADRO</button>
       </div>
-      
       <div class="game-container">
         <canvas id="hangman-canvas" width="200" height="250"></canvas>
         <div id="hangman-word-display">_ _ _ _ _</div>
@@ -109,14 +86,6 @@
       </div>
       <div id="game-message-area" style="text-align:center; margin-top: 25px;">
         <p id="game-message" style="font-weight:bold; font-size: 18px;"></p>
-      </div>
-    </div>
-
-    <div id="screen-Inserir" class="screen-content" style="text-align: center;">
-      <h3>Gerenciar Banco de Emojis</h3>
-      <div style="display:flex; gap:10px; justify-content:center; margin-bottom:20px;">
-        <input type="text" id="new-emoji-input" placeholder="Cole um emoji...">
-        <button class="phrase-btn" style="width: auto;" onclick="saveNewEmoji()">Salvar no Banco</button>
       </div>
     </div>
 
@@ -130,6 +99,7 @@
     </div>
 
     <script>
+      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby0ITQdb50dZ92yCG5TF7_v-CuvvIj2kGWLtNJs8Zmi-Q9Bm3PGjmLfdyGjqIGQVFaYrg/exec";
       let canvas, history = [], secretWord = "", guessedLetters = [], errors = 0;
 
       window.onload = function() {
@@ -139,184 +109,124 @@
           backgroundColor: '#fff', isDrawingMode: true
         });
 
-        // --- ATALHOS DE TECLADO ATUALIZADOS ---
         window.addEventListener('keydown', (e) => {
           if (document.activeElement.tagName === "INPUT") return;
-
-          // Ctrl + L -> Lápis
-          if (e.ctrlKey && e.key.toLowerCase() === 'l') {
-            e.preventDefault();
-            canvas.isDrawingMode = true;
-          }
-          // Ctrl + S -> Seleção
-          if (e.ctrlKey && e.key.toLowerCase() === 's') {
-            e.preventDefault();
-            canvas.isDrawingMode = false;
-          }
-          // Delete / Backspace
-          if (e.key === "Delete") {
-            deleteSelected();
-          }
-          // Ctrl + Z
-          if (e.ctrlKey && e.key.toLowerCase() === 'z') {
-            e.preventDefault();
-            undo();
-          }
+          if (e.ctrlKey && e.key.toLowerCase() === 'l') { e.preventDefault(); canvas.isDrawingMode = true; }
+          if (e.ctrlKey && e.key.toLowerCase() === 's') { e.preventDefault(); canvas.isDrawingMode = false; }
+          if (e.key === "Delete") { deleteSelected(); }
+          if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
         });
 
-        // --- CLIQUE DUPLO SEM TEXTO PADRÃO ---
         canvas.on('mouse:dblclick', (opt) => {
           const pointer = canvas.getPointer(opt.e);
-          const t = new fabric.IText("", { 
-            left: pointer.x, 
-            top: pointer.y, 
-            fontSize: 24, 
-            fill: canvas.freeDrawingBrush.color || 'black' 
-          });
+          const t = new fabric.IText("", { left: pointer.x, top: pointer.y, fontSize: 24, fill: canvas.freeDrawingBrush.color || 'black' });
           canvas.add(t);
           canvas.setActiveObject(t);
           canvas.isDrawingMode = false;
           t.enterEditing();
         });
-        
+
         canvas.on('object:added', () => { if(canvas.toJSON) history.push(JSON.stringify(canvas)); });
-        
         loadInitialData();
         createKeyboard();
         drawHangman(0);
       };
 
-      function createKeyboard() {
-        const kb = document.getElementById('game-keyboard'); 
-        kb.innerHTML = '';
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(l => {
-          const btn = document.createElement('button'); 
-          btn.className = 'key-btn'; 
-          btn.innerText = l;
-          btn.onclick = () => makeGuess(l, btn);
-          kb.appendChild(btn);
+      function loadInitialData() {
+        fetch(`${SCRIPT_URL}?action=initial&t=${new Date().getTime()}`)
+          .then(res => res.json())
+          .then(data => {
+            renderFrases(data.frases);
+            renderAdminFrases(data.frases);
+            renderSidebarEmojis(data.emojis);
+          })
+          .catch(err => console.error("Error loading data:", err));
+      }
+
+      function renderSidebarEmojis(emojis) {
+        const side = document.getElementById('sidebar-emojis'); side.innerHTML = '';
+        emojis.forEach(e => {
+          const div = document.createElement('div'); div.className = 'side-item'; div.innerText = e;
+          div.onclick = () => { canvas.add(new fabric.Text(e, {fontSize:40, left:100, top:100})); canvas.isDrawingMode=false; };
+          side.appendChild(div);
         });
       }
 
+      function renderFrases(fs) {
+        const bar = document.getElementById('phrases-bar'); bar.innerHTML = '';
+        fs.forEach(f => {
+          const btn = document.createElement('button'); btn.className = 'phrase-btn'; btn.style.width="auto"; btn.innerText = f;
+          btn.onclick = () => { canvas.add(new fabric.IText(f, {left:50, top:50, fontSize:24})); canvas.isDrawingMode=false; };
+          bar.appendChild(btn);
+        });
+      }
+
+      function renderAdminFrases(fs) {
+        const list = document.getElementById('phrases-mgr-list'); list.innerHTML = '';
+        fs.forEach(f => {
+          const item = document.createElement('div'); item.className = 'mgr-item';
+          item.innerHTML = `<span>${f}</span> <button onclick="deleteFraseDB('${f}')" style="color:red; border:none; background:none; cursor:pointer;">✖</button>`;
+          list.appendChild(item);
+        });
+      }
+
+      function saveNewFrase() {
+        const i = document.getElementById('new-frase-input');
+        if(!i.value) return;
+        fetch(`${SCRIPT_URL}?action=addFrase&novaFrase=${encodeURIComponent(i.value)}`)
+          .then(res => res.json())
+          .then(nl => { i.value=''; renderFrases(nl); renderAdminFrases(nl); });
+      }
+
+      function deleteFraseDB(f) {
+        if(confirm("Excluir?")) {
+          fetch(`${SCRIPT_URL}?action=removeFrase&frase=${encodeURIComponent(f)}`)
+            .then(res => res.json())
+            .then(nl => { renderFrases(nl); renderAdminFrases(nl); });
+        }
+      }
+
+      function undo() { if(history.length > 1) { history.pop(); canvas.loadFromJSON(history[history.length-1]); } else canvas.clear(); }
+      function clearBoard() { if(confirm("Limpar?")) { canvas.clear(); canvas.backgroundColor='#fff'; history=[]; } }
+      function deleteSelected() { const activeObjects = canvas.getActiveObjects(); if (activeObjects.length) { activeObjects.forEach(obj => canvas.remove(obj)); canvas.discardActiveObject().renderAll(); } }
+      function switchTab(name, el) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); document.querySelectorAll('[id^="screen-"]').forEach(s => s.style.display = 'none'); document.getElementById('screen-' + name).style.display = (name === 'Quadro') ? 'flex' : 'block'; }
+      function downloadCanvas() { const l = document.createElement('a'); l.download = 'aula.png'; l.href = canvas.toDataURL(); l.click(); }
+      function addPostIt() { canvas.add(new fabric.Rect({ width:120, height:120, fill:'#ffcccc', opacity:0.6, left:100, top:100 })); canvas.isDrawingMode = false; }
+      function addCircleFrame() { canvas.add(new fabric.Circle({ radius:40, fill:'transparent', stroke:'red', strokeWidth:3, left:150, top:150 })); canvas.isDrawingMode = false; }
+      function updateBrush(c, el) { canvas.isDrawingMode=true; canvas.freeDrawingBrush.color=c; document.querySelectorAll('.color-circle').forEach(x=>x.classList.remove('active')); el.classList.add('active'); }
+
+      // --- HANGMAN GAME LOGIC ---
+      function createKeyboard() { const kb = document.getElementById('game-keyboard'); kb.innerHTML = ''; "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(l => { const btn = document.createElement('button'); btn.className = 'key-btn'; btn.innerText = l; btn.onclick = () => makeGuess(l, btn); kb.appendChild(btn); }); }
       function startHangman() {
-  // 1. Pega TODOS os objetos que contêm texto, ignorando os vazios ou só com espaços
-  const allTexts = canvas.getObjects().filter(obj => 
-    (obj.type === 'text' || obj.type === 'i-text') && obj.text.trim().length > 0
-  );
-
-  if (allTexts.length === 0) {
-    alert("Escreva algo no quadro primeiro!");
-    return;
-  }
-
-  let wordsArray = [];
-  allTexts.forEach(obj => {
-    // 2. Limpa a palavra de caracteres especiais e espaços extras
-    const wordsInObject = obj.text.trim().toUpperCase().split(/\s+/);
-    
-    wordsInObject.forEach(word => {
-      // Remove pontuação (vírgulas, pontos) que podem estar colados na palavra
-      const cleanWord = word.replace(/[^A-ZÀ-Ú]/g, "");
-      if (cleanWord.length > 1) {
-        wordsArray.push(cleanWord);
+        const allTexts = canvas.getObjects().filter(obj => (obj.type === 'text' || obj.type === 'i-text') && obj.text.trim().length > 0);
+        if (allTexts.length === 0) { alert("Escreva algo no quadro primeiro!"); return; }
+        let wordsArray = [];
+        allTexts.forEach(obj => { const wordsInObject = obj.text.trim().toUpperCase().split(/\s+/); wordsInObject.forEach(word => { const cleanWord = word.replace(/[^A-ZÀ-Ú]/g, ""); if (cleanWord.length > 1) wordsArray.push(cleanWord); }); });
+        wordsArray = [...new Set(wordsArray)];
+        if (wordsArray.length === 0) { alert("Não encontrei palavras válidas no quadro."); return; }
+        secretWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
+        guessedLetters = []; errors = 0; document.getElementById('game-message').innerText = "";
+        createKeyboard(); drawHangman(0); updateHangmanDisplay();
       }
-    });
-  });
-
-  // 3. Remove duplicatas para aumentar a aleatoriedade real
-  wordsArray = [...new Set(wordsArray)];
-
-  if (wordsArray.length === 0) {
-    alert("Não encontrei palavras válidas (mínimo 2 letras) no quadro.");
-    return;
-  }
-
-  // 4. Sorteio com base no timestamp para evitar repetições de cache
-  const randomIndex = Math.floor(Math.random() * wordsArray.length);
-  secretWord = wordsArray[randomIndex];
-
-  // Reset de estado do jogo
-  guessedLetters = []; 
-  errors = 0;
-  document.getElementById('game-message').innerText = "";
-  createKeyboard(); 
-  drawHangman(0);
-  updateHangmanDisplay();
-  
-  // Log visual para você conferir no console (F12) se quiser ver o que ele sorteou
-  console.log("Palavras detectadas:", wordsArray);
-  console.log("Sorteada:", secretWord);
-}
-
-      function makeGuess(letter, btn) {
-        if(!secretWord || guessedLetters.includes(letter) || errors >= 6) return;
-        guessedLetters.push(letter);
-        btn.style.display = 'none';
-        if(!secretWord.includes(letter)) { errors++; drawHangman(errors); }
-        updateHangmanDisplay();
-        checkGameOver();
-      }
-
-      function updateHangmanDisplay() {
-        const display = secretWord.split('').map(l => guessedLetters.includes(l) ? l : '_').join(' ');
-        document.getElementById('hangman-word-display').innerText = display;
-      }
-
+      function makeGuess(letter, btn) { if(!secretWord || guessedLetters.includes(letter) || errors >= 6) return; guessedLetters.push(letter); btn.style.display = 'none'; if(!secretWord.includes(letter)) { errors++; drawHangman(errors); } updateHangmanDisplay(); checkGameOver(); }
+      function updateHangmanDisplay() { document.getElementById('hangman-word-display').innerText = secretWord.split('').map(l => guessedLetters.includes(l) ? l : '_').join(' '); }
       function checkGameOver() {
         const msg = document.getElementById('game-message');
         const isWin = secretWord && !document.getElementById('hangman-word-display').innerText.includes('_');
-        if(errors >= 6) { 
-            msg.innerHTML = `Está tudo bem, você só precisa praticar mais! 😉<br>A palavra era: <strong>${secretWord}</strong><br>Que tal criar uma frase com ela? 😉`; 
-            msg.style.color = "#555";
-        } else if(isWin) {
-          msg.innerText = "Parabéns! Você acertou! 🎉";
-          msg.style.color = "green";
-        }
+        if(errors >= 6) { msg.innerHTML = `Está tudo bem, pratique mais! 😉<br>A palavra era: <strong>${secretWord}</strong>`; }
+        else if(isWin) { msg.innerText = "Parabéns! 🎉"; msg.style.color = "green"; }
       }
-
       function drawHangman(step) {
         const c = document.getElementById('hangman-canvas').getContext('2d');
         c.clearRect(0, 0, 200, 250); c.lineWidth = 3; c.strokeStyle = '#333';
-        c.beginPath(); 
-        c.moveTo(20, 230); c.lineTo(180, 230);
-        c.moveTo(50, 230); c.lineTo(50, 20);
-        c.lineTo(130, 20); c.lineTo(130, 50);
-        c.stroke();
-        if(step > 0) { c.beginPath(); c.arc(130, 75, 25, 0, Math.PI*2); c.stroke(); } 
-        if(step > 1) { c.beginPath(); c.moveTo(130, 100); c.lineTo(130, 170); c.stroke(); } 
-        if(step > 2) { c.beginPath(); c.moveTo(130, 115); c.lineTo(100, 150); c.stroke(); } 
-        if(step > 3) { c.beginPath(); c.moveTo(130, 115); c.lineTo(160, 150); c.stroke(); } 
-        if(step > 4) { c.beginPath(); c.moveTo(130, 170); c.lineTo(100, 210); c.stroke(); } 
-        if(step > 5) { c.beginPath(); c.moveTo(130, 170); c.lineTo(160, 210); c.stroke(); } 
+        c.beginPath(); c.moveTo(20, 230); c.lineTo(180, 230); c.moveTo(50, 230); c.lineTo(50, 20); c.lineTo(130, 20); c.lineTo(130, 50); c.stroke();
+        if(step > 0) { c.beginPath(); c.arc(130, 75, 25, 0, Math.PI*2); c.stroke(); }
+        if(step > 1) { c.beginPath(); c.moveTo(130, 100); c.lineTo(130, 170); c.stroke(); }
+        if(step > 2) { c.beginPath(); c.moveTo(130, 115); c.lineTo(100, 150); c.stroke(); }
+        if(step > 3) { c.beginPath(); c.moveTo(130, 115); c.lineTo(160, 150); c.stroke(); }
+        if(step > 4) { c.beginPath(); c.moveTo(130, 170); c.lineTo(100, 210); c.stroke(); }
+        if(step > 5) { c.beginPath(); c.moveTo(130, 170); c.lineTo(160, 210); c.stroke(); }
       }
-
-      function switchTab(name, el) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        document.querySelectorAll('[id^="screen-"]').forEach(s => s.style.display = 'none');
-        document.getElementById('screen-' + name).style.display = (name === 'Quadro') ? 'flex' : 'block';
-      }
-      function downloadCanvas() { const l = document.createElement('a'); l.download = 'aula.png'; l.href = canvas.toDataURL(); l.click(); }
-      function deleteSelected() { 
-        const activeObjects = canvas.getActiveObjects();
-        if (activeObjects.length) {
-          activeObjects.forEach(obj => canvas.remove(obj));
-          canvas.discardActiveObject().renderAll();
-        }
-      }
-      function loadInitialData() { google.script.run.withSuccessHandler(fs => { renderFrases(fs); renderAdminFrases(fs); }).getFrases(); google.script.run.withSuccessHandler(renderSidebarEmojis).getEmojis(); }
-      function renderSidebarEmojis(emojis) { const side = document.getElementById('sidebar-emojis'); side.innerHTML = ''; emojis.forEach(e => { const div = document.createElement('div'); div.className = 'side-item'; div.innerText = e; div.onclick = () => { canvas.add(new fabric.Text(e, {fontSize:40, left:100, top:100})); canvas.isDrawingMode=false; }; side.appendChild(div); }); }
-      function addPostIt() { canvas.add(new fabric.Rect({ width:120, height:120, fill:'#ffcccc', opacity:0.6, left:100, top:100 })); canvas.isDrawingMode = false; }
-      function addCircleFrame() { canvas.add(new fabric.Circle({ radius:40, fill:'transparent', stroke:'red', strokeWidth:3, left:150, top:150 })); canvas.isDrawingMode = false; }
-      function renderFrases(fs) { const bar = document.getElementById('phrases-bar'); bar.innerHTML = ''; fs.forEach(f => { const btn = document.createElement('button'); btn.className = 'phrase-btn'; btn.style.width="auto"; btn.innerText = f; btn.onclick = () => { canvas.add(new fabric.IText(f, {left:50, top:50, fontSize:24})); canvas.isDrawingMode=false; }; bar.appendChild(btn); }); }
-      function renderAdminFrases(fs) { const list = document.getElementById('phrases-mgr-list'); list.innerHTML = ''; fs.forEach(f => { const item = document.createElement('div'); item.className = 'mgr-item'; item.innerHTML = `<span>${f}</span> <button onclick="deleteFraseDB('${f}')" style="color:red; border:none; background:none; cursor:pointer;">✖</button>`; list.appendChild(item); }); }
-      function saveNewFrase() { const i = document.getElementById('new-frase-input'); if(i.value) google.script.run.withSuccessHandler(nl => { i.value=''; renderFrases(nl); renderAdminFrases(nl); }).addFrase(i.value); }
-      function deleteFraseDB(f) { if(confirm("Excluir?")) google.script.run.withSuccessHandler(nl => { renderFrases(nl); renderAdminFrases(nl); }).removeFrase(f); }
-      function saveNewEmoji() { const v = document.getElementById('new-emoji-input').value; if(v) google.script.run.withSuccessHandler(loadInitialData).addEmojiDB(v); }
-      function updateBrush(c, el) { canvas.isDrawingMode=true; canvas.freeDrawingBrush.color=c; document.querySelectorAll('.color-circle').forEach(x=>x.classList.remove('active')); el.classList.add('active'); }
-      function undo() { if(history.length > 1) { history.pop(); canvas.loadFromJSON(history[history.length-1]); } else canvas.clear(); }
-      function clearBoard() { if(confirm("Limpar?")) { canvas.clear(); canvas.backgroundColor='#fff'; history=[]; } }
-      function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
     </script>
   </body>
 </html>
