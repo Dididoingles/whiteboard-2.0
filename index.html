@@ -1164,7 +1164,7 @@
       /* ==========================================================================
          MODULE 4: HANGMAN GAME ENGINE (Preserved Logic & Appearance)
          ========================================================================== */
-      let secretWord = "", guessedLetters = [], errors = 0;
+         let secretWord = "", guessedLetters = [], errors = 0, usedWords = [];
 
       function createKeyboard() { 
         const kb = document.getElementById('game-keyboard'); 
@@ -1179,50 +1179,67 @@
       }
       
       function startHangman() {
-        const allTexts = canvas.getObjects().filter(obj => (obj.type === 'text' || obj.type === 'i-text') && obj.text.trim().length > 0);
-        if (allTexts.length === 0) { 
-          openConfirmModal("Modo Game", "Escreva algumas palavras no quadro primeiro para jogar!", () => {});
-          return; 
-        }
+  const allTexts = canvas.getObjects().filter(obj => (obj.type === 'text' || obj.type === 'i-text') && obj.text.trim().length > 0);
+  if (allTexts.length === 0) { 
+    openConfirmModal("Modo Game", "Escreva algumas palavras no quadro primeiro para jogar!", () => {});
+    return; 
+  }
 
-        let wordsArray = [];
-        allTexts.forEach(obj => { 
-          const wordsInObject = obj.text.trim().toUpperCase().split(/\s+/); 
-          wordsInObject.forEach(word => { 
-            const cleanWord = word.replace(/[^A-ZÀ-Ú]/g, ""); 
-            if (cleanWord.length > 1) wordsArray.push(cleanWord); 
-          }); 
-        });
+  let wordsArray = [];
+  allTexts.forEach(obj => { 
+    const wordsInObject = obj.text.trim().toUpperCase().split(/\s+/); 
+    wordsInObject.forEach(word => { 
+      const cleanWord = word.replace(/[^A-ZÀ-Ú]/g, ""); 
+      if (cleanWord.length > 1) wordsArray.push(cleanWord); 
+    }); 
+  });
 
-        wordsArray = [...new Set(wordsArray)];
-        if (wordsArray.length === 0) { 
-          openConfirmModal("Modo Game", "Não foram encontradas palavras válidas no quadro.", () => {});
-          return; 
-        }
+  wordsArray = [...new Set(wordsArray)];
+  if (wordsArray.length === 0) { 
+    openConfirmModal("Modo Game", "Não foram encontradas palavras válidas no quadro.", () => {});
+    return; 
+  }
 
-        secretWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
-        guessedLetters = []; 
-        errors = 0; 
-        document.getElementById('game-message').innerHTML = "";
-        createKeyboard(); 
-        drawHangman(0); 
-        updateHangmanDisplay();
-      }
+  // --- NON-REPEATING LOGIC START ---
+  // 1. Reset usedWords if all available words on the board have already been played
+  if (usedWords.length >= wordsArray.length) {
+    usedWords = [];
+  }
+
+  // 2. Filter out any word that has already been chosen in this cycle
+  const availableWords = wordsArray.filter(w => !usedWords.includes(w));
+
+  // 3. Select a random word from the remaining unplayed pool
+  secretWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+
+  // 4. Track this selected word
+  usedWords.push(secretWord);
+  // --- NON-REPEATING LOGIC END ---
+
+  guessedLetters = []; 
+  errors = 0; 
+  document.getElementById('game-message').innerHTML = "";
+  createKeyboard(); 
+  drawHangman(0); 
+  updateHangmanDisplay();
+}
       
       function makeGuess(letter, btn) { 
-        if(!secretWord) return;
-        if(guessedLetters.includes(letter) || errors >= 6) return; 
-        guessedLetters.push(letter); 
-        btn.style.display = 'none'; 
-        if(!secretWord.includes(letter)) { 
-          errors++; 
-          drawHangman(errors); 
-        } else { 
-          drawHangman(errors); 
-        } 
-        updateHangmanDisplay(); 
-        checkGameOver(); 
-      }
+  if(!secretWord) return;
+  if(guessedLetters.includes(letter) || errors >= 6) return; 
+  
+  // Register guess and immediately hide clicked key
+  guessedLetters.push(letter); 
+  btn.style.visibility = 'hidden'; // Keeps key layout intact while hiding letter
+  
+  if(!secretWord.includes(letter)) { 
+    errors++; 
+  } 
+  
+  drawHangman(errors); 
+  updateHangmanDisplay(); 
+  checkGameOver(); 
+}
       
       function updateHangmanDisplay() { 
         document.getElementById('hangman-word-display').innerText = secretWord.split('').map(l => guessedLetters.includes(l) ? l : '_').join(' '); 
