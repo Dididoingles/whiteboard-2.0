@@ -11,9 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-      /* ==========================================================================
-         1. CSS VARIABLES & BASE STYLES
-         ========================================================================== */
+      /* 1. CSS VARIABLES & BASE STYLES*/
       :root { 
         --primary-red: #c00000; 
         --primary-red-hover: #a00000;
@@ -34,9 +32,7 @@
         height: 100vh; 
       }
 
-      /* ==========================================================================
-         2. NAVIGATION & TOP BAR
-         ========================================================================== */
+      /*  2. NAVIGATION & TOP BAR */
       .top-bar { 
         background: var(--primary-red); 
         color: white; 
@@ -117,31 +113,31 @@
       }
       
       #sidebar { 
-  width: 70px; 
-  background: var(--panel-bg); 
-  border-right: 1px solid var(--border-color); 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 12px; 
-  padding: 12px 0; 
-  overflow: visible; /* CRITICAL: Must be visible so tooltips spill out */
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
-}
+        width: 70px; 
+        background: var(--panel-bg); 
+        border-right: 1px solid var(--border-color); 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 12px; 
+        padding: 12px 0; 
+        overflow: visible; 
+        flex-shrink: 0;
+        position: relative;
+        z-index: 10;
+      }
       
       #canvas-container { 
-  flex-grow: 1; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  padding: 10px; 
-  background: #eee; 
-  overflow: hidden; 
-  position: relative;
-  z-index: 1; /* Keeps canvas container beneath sidebar tooltips */
-}
+        flex-grow: 1; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        padding: 10px; 
+        background: #eee; 
+        overflow: hidden; 
+        position: relative;
+        z-index: 1; 
+      }
       
       canvas { 
         border-radius: 8px; 
@@ -199,20 +195,6 @@
         gap: 6px;
         margin-bottom: 4px;
       }
-
-      #brush-color-picker {
-        -webkit-appearance: none;
-        border: none;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        cursor: pointer;
-        padding: 0;
-        background: none;
-      }
-
-      #brush-color-picker::-webkit-color-swatch-wrapper { padding: 0; }
-      #brush-color-picker::-webkit-color-swatch { border: 2px solid #ddd; border-radius: 50%; }
 
       .brush-size-container {
         width: 90%;
@@ -358,10 +340,10 @@
       }
 
       .phrase-btn:hover {
-  background: var(--primary-red-hover) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
+        background: var(--primary-red-hover) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
 
       /*  5. MODALS SYSTEM (Icon Picker, Confirmations, Tutorial)*/
       .modal-overlay {
@@ -485,20 +467,20 @@
       @media (max-width: 768px) {
         #quadro-layout { flex-direction: column; }
         #sidebar { 
-  width: 70px; 
-  background: var(--panel-bg); 
-  border-right: 1px solid var(--border-color); 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 12px; 
-  padding: 12px 0; 
-  overflow-y: visible; /* Changed from auto so tooltips spill outside the bar */
-  overflow-x: visible;
-  flex-shrink: 0;
-  position: relative; 
-  z-index: 10; /* Elevates sidebar above the central canvas */
-}
+          width: 70px; 
+          background: var(--panel-bg); 
+          border-right: 1px solid var(--border-color); 
+          display: flex; 
+          flex-direction: column; 
+          align-items: center; 
+          gap: 12px; 
+          padding: 12px 0; 
+          overflow-y: visible; 
+          overflow-x: visible;
+          flex-shrink: 0;
+          position: relative; 
+          z-index: 10; 
+        }
         #right-controls { 
           width: 100%; 
           height: auto; 
@@ -516,196 +498,179 @@
       }
 
       /* Hide by default on desktops/laptops */
-#mobile-warning-overlay {
-  display: none;
-}
+      #mobile-warning-overlay {
+        display: none;
+      }
 
-/* Mobile-only overlay trigger (activates on screens 768px or smaller) */
-@media (max-width: 768px) {
-  #mobile-warning-overlay {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--bg-main);
-    z-index: 99999;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center;
-  }
+      /* Mobile-only overlay trigger */
+      @media (max-width: 768px) {
+        #mobile-warning-overlay {
+          display: flex;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color: var(--bg-main);
+          z-index: 99999;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+          box-sizing: border-box;
+          text-align: center;
+        }
 
-  .mobile-warning-card {
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 30px 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-  }
+        .mobile-warning-card {
+          background: #ffffff;
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 30px 20px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+          max-width: 400px;
+        }
 
-  .mobile-warning-icon {
-    font-size: 48px;
-    color: var(--primary-red);
-    margin-bottom: 16px;
-  }
+        .mobile-warning-icon {
+          font-size: 48px;
+          color: var(--primary-red);
+          margin-bottom: 16px;
+        }
 
-  .mobile-warning-card h2 {
-    margin: 0 0 12px 0;
-    color: var(--text-color);
-    font-size: 20px;
-  }
+        .mobile-warning-card h2 {
+          margin: 0 0 12px 0;
+          color: var(--text-color);
+          font-size: 20px;
+        }
 
-  .mobile-warning-card p {
-    margin: 8px 0;
-    color: #666666;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-}
+        .mobile-warning-card p {
+          margin: 8px 0;
+          color: #666666;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+      }
 
-/* Container that holds all external link icons at the bottom */
-.sidebar-links-group {
-  margin-top: auto; /* Pushes the entire cluster to the bottom */
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-  padding-bottom: 8px;
-}
+      /* Container that holds all external link icons at the bottom */
+      .sidebar-links-group {
+        margin-top: auto; 
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+        padding-bottom: 8px;
+      }
 
-/* Base style for all sidebar link buttons */
-.sidebar-link-btn {
-  font-size: 18px;
-  color: #444;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid #eee;
-  background: #fff;
-  transition: all 0.2s ease;
-}
+      /* Base style for all sidebar link buttons */
+      .sidebar-link-btn {
+        font-size: 18px;
+        color: #444;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid #eee;
+        background: #fff;
+        transition: all 0.2s ease;
+      }
 
-/* Base hover state */
-.sidebar-link-btn:hover {
-  transform: scale(1.08);
-  border-color: var(--primary-red);
-  color: var(--primary-red);
-  background: #fff5f5;
-}
+      /* Base hover state */
+      .sidebar-link-btn:hover {
+        transform: scale(1.08);
+        border-color: var(--primary-red);
+        color: var(--primary-red);
+        background: #fff5f5;
+      }
 
-/* Optional individual brand colors on hover */
-.sidebar-link-btn.youtube:hover { color: #ff0000; border-color: #ff0000; background: #fff0f0; }
-.sidebar-link-btn.translate:hover { color: #1a73e8; border-color: #1a73e8; background: #f0f6ff; }
-.sidebar-link-btn.maps:hover { color: #ea4335; border-color: #ea4335; background: #fff0f0; }
-.sidebar-link-btn.instagram:hover { color: #e1306c; border-color: #e1306c; background: #fff5f8; }
+      .sidebar-link-btn.youtube:hover { color: #ff0000; border-color: #ff0000; background: #fff0f0; }
+      .sidebar-link-btn.translate:hover { color: #1a73e8; border-color: #1a73e8; background: #f0f6ff; }
+      .sidebar-link-btn.maps:hover { color: #ea4335; border-color: #ea4335; background: #fff0f0; }
+      .sidebar-link-btn.instagram:hover { color: #e1306c; border-color: #e1306c; background: #fff5f8; }
 
-/* Custom styling for the brush size range slider */
-.brush-size-container input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 6px;
-  background: #e0e0e0;
-  border-radius: 3px;
-  outline: none;
-  cursor: pointer;
-}
+      /* Custom styling for the brush size range slider */
+      .brush-size-container input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+        outline: none;
+        cursor: pointer;
+      }
 
-/* 1. Chrome, Safari, Edge - Interactive Knob */
-.brush-size-container input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--primary-red);
-  cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
+      .brush-size-container input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--primary-red);
+        cursor: pointer;
+        transition: transform 0.15s ease, background-color 0.15s ease;
+      }
 
-.brush-size-container input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  background: var(--primary-red-hover);
-}
+      .brush-size-container input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        background: var(--primary-red-hover);
+      }
 
-/* 2. Firefox - Interactive Knob */
-.brush-size-container input[type="range"]::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border: none;
-  border-radius: 50%;
-  background: var(--primary-red);
-  cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
+      .brush-size-container input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border: none;
+        border-radius: 50%;
+        background: var(--primary-red);
+        cursor: pointer;
+        transition: transform 0.15s ease, background-color 0.15s ease;
+      }
 
-.brush-size-container input[type="range"]::-moz-range-thumb:hover {
-  transform: scale(1.2);
-  background: var(--primary-red-hover);
-}
+      .brush-size-container input[type="range"]::-moz-range-thumb:hover {
+        transform: scale(1.2);
+        background: var(--primary-red-hover);
+      }
 
-/* Base container positioning for tooltips */
-.sidebar-link-btn, .side-item {
-  position: relative; /* Essential for positioning the label relative to the button */
-}
+      /* Base container positioning for tooltips */
+      .sidebar-link-btn, .side-item {
+        position: relative; 
+      }
 
-.sidebar-link-btn[data-tooltip]::after,
-.side-item[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 115%;
-  top: 50%;
-  transform: translateY(-50%) translateX(-5px);
-  background-color: #c20000;
-  color: #ffffff;
-  padding: 5px 9px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 500;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  z-index: 99999; /* Increased z-index */
-}
+      .sidebar-link-btn[data-tooltip]::after,
+      .side-item[data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 115%;
+        top: 50%;
+        transform: translateY(-50%) translateX(-5px);
+        background-color: #c20000;
+        color: #ffffff;
+        padding: 5px 9px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        z-index: 99999;
+      }
 
-.sidebar-link-btn[data-tooltip]::before,
-.side-item[data-tooltip]::before {
-  content: '';
-  position: absolute;
-  left: 105%;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent #333333 transparent transparent;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease-in-out;
-  z-index: 99999; /* Increased z-index */
-}
+      /* Tooltip positioning specifically tailored for the right-hand sidebar */
+      #right-controls [data-tooltip]::after {
+        right: 115%;
+        left: auto;
+      }
 
-/* Show on hover with a subtle slide effect */
-.sidebar-link-btn:hover::after,
-.sidebar-link-btn:hover::before,
-.side-item:hover::after,
-.side-item:hover::before {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(-50%) translateX(0);
-}
-
-
+      /* Show on hover */
+      .sidebar-link-btn:hover::after,
+      .side-item:hover::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(-50%) translateX(0);
+      }
     </style>
   </head>
   <body>
@@ -720,46 +685,40 @@
     </div>
 
     <!-- TABS NAVIGATION -->
-<div class="nav-tabs">
-    <div class="tab active" onclick="switchTab('Quadro', this)"><i class="fa-solid fa-pen-to-square"></i> whiteboard</div>
-    <div class="tab" onclick="switchTab('Modo-game', this)"><i class="fa-solid fa-gamepad"></i> Game mode</div>
-  </div>
-   
+    <div class="nav-tabs">
+      <div class="tab active" onclick="switchTab('Quadro', this)"><i class="fa-solid fa-pen-to-square"></i> whiteboard</div>
+      <div class="tab" onclick="switchTab('Modo-game', this)"><i class="fa-solid fa-gamepad"></i> Game mode</div>
+    </div>
 
     <!-- MAIN WHITEBOARD SCREEN -->
     <div id="screen-Quadro">
       <div id="quadro-layout">
         <!-- Left Sidebar Tools -->
-<div id="sidebar">
-    <div class="side-item" onclick="openIconModal()" data-tooltip="Adicionar Ícone"><i class="fa-solid fa-icons"></i></div>
-    <div class="side-item" onclick="addPostIt()" data-tooltip="Post-it"><i class="fa-regular fa-note-sticky"></i></div>
-    <div class="side-item" onclick="addCircleFrame()" data-tooltip="Destaque"><i class="fa-regular fa-circle"></i></div>
-    <!-- NEW LICENSE BUTTON -->
-<div class="side-item" onclick="openModal('licenseModal')" data-tooltip="Termos de Uso / Licença"><i class="fa-solid fa-scale-balanced"></i></div>
-  
-    <!-- EXTERNAL LINKS SECTION -->
-    <div class="sidebar-links-group">
-      <a href="https://images.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn" data-tooltip="Google Imagens">
-        <i class="fa-solid fa-image"></i>
-      </a>
-  
-      <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn youtube" data-tooltip="YouTube">
-        <i class="fa-brands fa-youtube"></i>
-      </a>
-  
-      <a href="https://translate.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn translate" data-tooltip="Google Tradutor">
-        <i class="fa-solid fa-language"></i>
-      </a>
-  
-      <a href="https://maps.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn maps" data-tooltip="Google Maps">
-        <i class="fa-solid fa-location-dot"></i>
-      </a>
-  
-      <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn instagram" data-tooltip="Siga-nos no Instagram">
-        <i class="fa-brands fa-instagram"></i>
-      </a>
-    </div>
-  </div>
+        <div id="sidebar">
+          <div class="side-item" onclick="openIconModal()" data-tooltip="Adicionar Ícone"><i class="fa-solid fa-icons"></i></div>
+          <div class="side-item" onclick="addPostIt()" data-tooltip="Post-it"><i class="fa-regular fa-note-sticky"></i></div>
+          <div class="side-item" onclick="addCircleFrame()" data-tooltip="Destaque"><i class="fa-regular fa-circle"></i></div>
+          <div class="side-item" onclick="openModal('licenseModal')" data-tooltip="Termos de Uso / Licença"><i class="fa-solid fa-scale-balanced"></i></div>
+        
+          <!-- EXTERNAL LINKS SECTION -->
+          <div class="sidebar-links-group">
+            <a href="https://images.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn" data-tooltip="Google Imagens">
+              <i class="fa-solid fa-image"></i>
+            </a>
+            <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn youtube" data-tooltip="YouTube">
+              <i class="fa-brands fa-youtube"></i>
+            </a>
+            <a href="https://translate.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn translate" data-tooltip="Google Tradutor">
+              <i class="fa-solid fa-language"></i>
+            </a>
+            <a href="https://maps.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn maps" data-tooltip="Google Maps">
+              <i class="fa-solid fa-location-dot"></i>
+            </a>
+            <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn instagram" data-tooltip="Siga-nos no Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+          </div>
+        </div>
 
         <!-- Central Canvas Board -->
         <div id="canvas-container">
@@ -768,40 +727,42 @@
 
         <!-- Right Controls & Brush Customisations -->
         <div id="right-controls">
-            <span class="control-label">Mais cores</span>
-            <div class="color-picker-wrapper">
-              <input type="color" id="brush-color-picker" value="#000000" onchange="updateBrushFromColorPicker(this.value)" title="Escolher cor visualmente">
-              <input type="text" id="brush-hex-input" value="#000000" placeholder="#000000" maxlength="7" onchange="updateBrushFromHexInput(this.value)" style="width: 55px; font-size: 11px; padding: 3px 5px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-family: monospace;">
-            </div>
-            
-            <div class="color-grid">
-              <div class="color-circle active" style="background: black;" onclick="updateBrushColor('black', this)"></div>
-              <div class="color-circle" style="background: #c00000;" onclick="updateBrushColor('#c00000', this)"></div>
-              <div class="color-circle" style="background: #fa5189;" onclick="updateBrushColor('#3d85c6', this)"></div>
-              <div class="color-circle" style="background: #38e00e;" onclick="updateBrushColor('#6aa84f', this)"></div>
-              <div class="color-circle" style="background: #ffe607;" onclick="updateBrushColor('#f1c232', this)"></div>
-              <div class="color-circle" style="background: #7f54ff;" onclick="updateBrushColor('#8e7cc3', this)"></div>
-            </div>
-  
-            <span class="control-label" onclick="undo()"><i class="fa-solid fa-brush"></i>  Size</span>
-            <div class="brush-size-container">
-              <input type="range" id="brush-size" min="1" max="40" value="3" oninput="updateBrushSize(this.value)">
-            </div>
-  
-            <hr style="width: 80%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
-  
-            <button class="action-btn" onclick="undo()"><i class="fa-solid fa-rotate-left"></i> DESFAZER</button>
-            <button class="action-btn" onclick="promptDeleteSelected()" style="color:red;"><i class="fa-solid fa-trash-can"></i> EXCLUIR</button>
-            <button class="action-btn" onclick="promptClearBoard()"><i class="fa-solid fa-broom"></i> LIMPAR</button>
-  
-            <hr style="width: 80%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
-            <button class="action-btn" onclick="downloadCanvas()" style="background: #eef9ee; border-color: #9cdb9c;"><i class="fa-solid fa-download"></i> BAIXAR</button>
+          <span class="control-label">Mais cores</span>
+          <div class="color-picker-wrapper" style="position: relative;">
+            <label for="brush-color-picker" class="side-item" style="width: 32px; height: 32px; padding: 0; cursor: pointer;" data-tooltip="Make your color">
+              <i class="fa-solid fa-palette" style="font-size: 16px;"></i>
+            </label>
+            <input type="color" id="brush-color-picker" value="#000000" onchange="updateBrushFromColorPicker(this.value)" 
+                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
           </div>
-        </div> 
-    </div>  
-  </div>     
+          
+          <div class="color-grid">
+            <div class="color-circle active" style="background: black;" onclick="updateBrushColor('black', this)"></div>
+            <div class="color-circle" style="background: #c00000;" onclick="updateBrushColor('#c00000', this)"></div>
+            <div class="color-circle" style="background: #3d85c6;" onclick="updateBrushColor('#3d85c6', this)"></div>
+            <div class="color-circle" style="background: #6aa84f;" onclick="updateBrushColor('#6aa84f', this)"></div>
+            <div class="color-circle" style="background: #f1c232;" onclick="updateBrushColor('#f1c232', this)"></div>
+            <div class="color-circle" style="background: #8e7cc3;" onclick="updateBrushColor('#8e7cc3', this)"></div>
+          </div>
 
-    <!-- GAME MODE SCREEN (Preserved) -->
+          <span class="control-label" onclick="undo()"><i class="fa-solid fa-brush"></i> Size</span>
+          <div class="brush-size-container">
+            <input type="range" id="brush-size" min="1" max="40" value="3" oninput="updateBrushSize(this.value)">
+          </div>
+
+          <hr style="width: 80%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
+
+          <button class="action-btn" onclick="undo()"><i class="fa-solid fa-rotate-left"></i> DESFAZER</button>
+          <button class="action-btn" onclick="promptDeleteSelected()" style="color:red;"><i class="fa-solid fa-trash-can"></i> EXCLUIR</button>
+          <button class="action-btn" onclick="promptClearBoard()"><i class="fa-solid fa-broom"></i> LIMPAR</button>
+
+          <hr style="width: 80%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
+          <button class="action-btn" onclick="downloadCanvas()" style="background: #eef9ee; border-color: #9cdb9c;"><i class="fa-solid fa-download"></i> BAIXAR</button>
+        </div> <!-- Closes #right-controls -->
+      </div> <!-- Closes #quadro-layout -->
+    </div> <!-- Closes #screen-Quadro -->
+
+    <!-- GAME MODE SCREEN -->
     <div id="screen-Modo-game" class="screen-content">
       <div style="text-align: center; margin-bottom: 20px;">
         <button class="phrase-btn" style="width:auto; padding: 10px 20px; font-weight:bold; background: var(--primary-red); color: white;" onclick="startHangman()">SORTEAR PALAVRA DO QUADRO</button>
@@ -865,22 +826,22 @@
     </div>
 
     <!-- MODAL: License & Terms of Use -->
-<div id="licenseModal" class="modal-overlay" onclick="if(event.target === this) closeModal('licenseModal')">
-    <div class="modal-card" style="text-align: center;">
-      <h3><i class="fa-solid fa-scale-balanced"></i> Licença & Termos de Uso</h3>
-      
-      <div style="text-align: left; font-size: 13px; color: #444; line-height: 1.6; margin: 15px 0;">
-        <p style="margin-bottom: 10px;">
-          <strong>✅ Uso Gratuito:</strong> Esta ferramenta é inteiramente gratuita para professores, alunos e educadores utilizarem em suas aulas.
-        </p>
-        <p style="margin-bottom: 0;">
-          <strong>🚫 Proibida a Comercialização:</strong> É estritamente proibida a venda, revenda ou distribuição comercial deste código e software.
-        </p>
+    <div id="licenseModal" class="modal-overlay" onclick="if(event.target === this) closeModal('licenseModal')">
+      <div class="modal-card" style="text-align: center;">
+        <h3><i class="fa-solid fa-scale-balanced"></i> Licença & Termos de Uso</h3>
+        
+        <div style="text-align: left; font-size: 13px; color: #444; line-height: 1.6; margin: 15px 0;">
+          <p style="margin-bottom: 10px;">
+            <strong>✅ Uso Gratuito:</strong> Esta ferramenta é inteiramente gratuita para professores, alunos e educadores utilizarem em suas aulas.
+          </p>
+          <p style="margin-bottom: 0;">
+            <strong>🚫 Proibida a Comercialização:</strong> É estritamente proibida a venda, revenda ou distribuição comercial deste código e software.
+          </p>
+        </div>
+    
+        <button class="btn-modal btn-modal-primary" style="width: 100%; margin-top: 10px;" onclick="closeModal('licenseModal')">Entendi</button>
       </div>
-  
-      <button class="btn-modal btn-modal-primary" style="width: 100%; margin-top: 10px;" onclick="closeModal('licenseModal')">Entendi</button>
     </div>
-  </div>
 
     <!-- Long Operation Toast Notification Container -->
     <div id="toast" class="toast-notification"></div>
@@ -914,33 +875,71 @@
           isDrawingMode: true
         });
 
-        // Set default brush parameters
         canvas.freeDrawingBrush.color = '#000000';
         canvas.freeDrawingBrush.width = 3;
 
-        // Double click to add editable text
         canvas.on('mouse:dblclick', (opt) => {
           const pointer = canvas.getPointer(opt.e);
-          const t = new fabric.IText("", { 
-            left: pointer.x, 
-            top: pointer.y, 
-            fontSize: 24, 
-            fill: canvas.freeDrawingBrush.color || '#000000' 
+          
+          const textbox = new fabric.Textbox("Type here...", {
+            left: pointer.x,
+            top: pointer.y,
+            width: 200,
+            fontSize: 24,
+            fill: canvas.freeDrawingBrush.color || '#000000',
+            splitByGrapheme: false,
+            lockUniScaling: true
           });
-          canvas.add(t);
-          canvas.setActiveObject(t);
+
+          canvas.add(textbox);
+          canvas.setActiveObject(textbox);
           canvas.isDrawingMode = false;
-          t.enterEditing();
+          textbox.enterEditing();
+          textbox.selectAll();
         });
 
-        // History tracking with stack capacity limit
         canvas.on('object:added', pushHistoryState);
         canvas.on('object:modified', pushHistoryState);
         canvas.on('object:removed', pushHistoryState);
         
-        // Initial state
         pushHistoryState();
       }
+
+      canvas?.on('object:scaling', (e) => {
+        const obj = e.target;
+        if (obj && obj.type === 'textbox') {
+          const transform = canvas._currentTransform;
+          if (!transform) return;
+
+          const corner = transform.corner;
+          if (corner === 'mr' || corner === 'ml') {
+            const newWidth = obj.width * obj.scaleX;
+            obj.set({
+              width: Math.max(newWidth, 50),
+              scaleX: 1,
+              scaleY: 1
+            });
+          }
+        }
+      });
+
+      canvas?.on('object:moving', (e) => {
+        const obj = e.target;
+        if (!obj) return;
+
+        const bound = obj.getBoundingRect();
+        const canvasWidth = canvas.getWidth();
+        const canvasHeight = canvas.getHeight();
+
+        if (bound.left < 0) obj.left = obj.left - bound.left;
+        if (bound.top < 0) obj.top = obj.top - bound.top;
+        if (bound.left + bound.width > canvasWidth) {
+          obj.left = canvasWidth - bound.width;
+        }
+        if (bound.top + bound.height > canvasHeight) {
+          obj.top = canvasHeight - bound.height;
+        }
+      });
 
       function setupResizeListener() {
         window.addEventListener('resize', () => {
@@ -966,7 +965,7 @@
 
       function undo() {
         if (history.length > 1) {
-          history.pop(); // Remove current state
+          history.pop();
           const prevState = history[history.length - 1];
           canvas.loadFromJSON(prevState, () => {
             canvas.renderAll();
@@ -1007,18 +1006,6 @@
         );
       }
 
-      function updateBrushFromHexInput(hex) {
-        let formattedHex = hex.trim();
-        if (!formattedHex.startsWith('#')) {
-          formattedHex = '#' + formattedHex;
-        }
-        if (/^#([0-9A-F]{3}){1,2}$/i.test(formattedHex)) {
-          updateBrushColor(formattedHex);
-        } else {
-          document.getElementById('brush-hex-input').value = canvas.freeDrawingBrush.color;
-        }
-      }
-
       function updateBrushFromColorPicker(hex) {
         updateBrushColor(hex);
       }
@@ -1029,7 +1016,6 @@
 
         const validHex = colorHex.startsWith('#') ? colorHex : '#000000';
         document.getElementById('brush-color-picker').value = validHex;
-        document.getElementById('brush-hex-input').value = validHex.toUpperCase();
 
         document.querySelectorAll('.color-circle').forEach(el => el.classList.remove('active'));
         if (element) {
@@ -1057,7 +1043,6 @@
       }
 
       function downloadCanvas() {
-        // High quality download operation taking >1s triggers toast
         showLongOperationToast("⏳ Gerando imagem para download...");
         setTimeout(() => {
           const link = document.createElement('a');
@@ -1094,7 +1079,6 @@
 
       function selectIcon(iconClass) {
         closeModal('iconModal');
-        // Render Font Awesome unicode character directly onto canvas vector text
         const tempI = document.createElement('i');
         tempI.className = `fa-solid ${iconClass}`;
         document.body.appendChild(tempI);
@@ -1162,9 +1146,9 @@
       }
 
       /* ==========================================================================
-         MODULE 4: HANGMAN GAME ENGINE (Preserved Logic & Appearance)
+         MODULE 4: HANGMAN GAME ENGINE
          ========================================================================== */
-         let secretWord = "", guessedLetters = [], errors = 0, usedWords = [];
+      let secretWord = "", guessedLetters = [], errors = 0, usedWords = [];
 
       function createKeyboard() { 
         const kb = document.getElementById('game-keyboard'); 
@@ -1179,67 +1163,58 @@
       }
       
       function startHangman() {
-  const allTexts = canvas.getObjects().filter(obj => (obj.type === 'text' || obj.type === 'i-text') && obj.text.trim().length > 0);
-  if (allTexts.length === 0) { 
-    openConfirmModal("Modo Game", "Escreva algumas palavras no quadro primeiro para jogar!", () => {});
-    return; 
-  }
+        const allTexts = canvas.getObjects().filter(obj => (obj.type === 'text' || obj.type === 'i-text' || obj.type === 'textbox') && obj.text.trim().length > 0);
+        if (allTexts.length === 0) { 
+          openConfirmModal("Modo Game", "Escreva algumas palavras no quadro primeiro para jogar!", () => {});
+          return; 
+        }
 
-  let wordsArray = [];
-  allTexts.forEach(obj => { 
-    const wordsInObject = obj.text.trim().toUpperCase().split(/\s+/); 
-    wordsInObject.forEach(word => { 
-      const cleanWord = word.replace(/[^A-ZÀ-Ú]/g, ""); 
-      if (cleanWord.length > 1) wordsArray.push(cleanWord); 
-    }); 
-  });
+        let wordsArray = [];
+        allTexts.forEach(obj => { 
+          const wordsInObject = obj.text.trim().toUpperCase().split(/\s+/); 
+          wordsInObject.forEach(word => { 
+            const cleanWord = word.replace(/[^A-ZÀ-Ú]/g, ""); 
+            if (cleanWord.length > 1) wordsArray.push(cleanWord); 
+          }); 
+        });
 
-  wordsArray = [...new Set(wordsArray)];
-  if (wordsArray.length === 0) { 
-    openConfirmModal("Modo Game", "Não foram encontradas palavras válidas no quadro.", () => {});
-    return; 
-  }
+        wordsArray = [...new Set(wordsArray)];
+        if (wordsArray.length === 0) { 
+          openConfirmModal("Modo Game", "Não foram encontradas palavras válidas no quadro.", () => {});
+          return; 
+        }
 
-  // --- NON-REPEATING LOGIC START ---
-  // 1. Reset usedWords if all available words on the board have already been played
-  if (usedWords.length >= wordsArray.length) {
-    usedWords = [];
-  }
+        if (usedWords.length >= wordsArray.length) {
+          usedWords = [];
+        }
 
-  // 2. Filter out any word that has already been chosen in this cycle
-  const availableWords = wordsArray.filter(w => !usedWords.includes(w));
+        const availableWords = wordsArray.filter(w => !usedWords.includes(w));
+        secretWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+        usedWords.push(secretWord);
 
-  // 3. Select a random word from the remaining unplayed pool
-  secretWord = availableWords[Math.floor(Math.random() * availableWords.length)];
-
-  // 4. Track this selected word
-  usedWords.push(secretWord);
-  // --- NON-REPEATING LOGIC END ---
-
-  guessedLetters = []; 
-  errors = 0; 
-  document.getElementById('game-message').innerHTML = "";
-  createKeyboard(); 
-  drawHangman(0); 
-  updateHangmanDisplay();
-}
+        guessedLetters = []; 
+        errors = 0; 
+        document.getElementById('game-message').innerHTML = "";
+        createKeyboard(); 
+        drawHangman(0); 
+        updateHangmanDisplay();
+      }
       
       function makeGuess(letter, btn) { 
-  if(!secretWord) return;
-  if(guessedLetters.includes(letter) || errors >= 6) return; 
-  
-  // Register guess and immediately hide clicked key
-  guessedLetters.push(letter); 
-  btn.style.visibility = 'hidden'; // Keeps key layout intact while hiding letter
-  
-  if(!secretWord.includes(letter)) { 
-    errors++; 
-  } 
-  
-  drawHangman(errors); 
-  updateHangmanDisplay(); 
-  checkGameOver(); 
-}
+        if(!secretWord) return;
+        if(guessedLetters.includes(letter) || errors >= 6) return; 
+        
+        guessedLetters.push(letter); 
+        btn.style.visibility = 'hidden'; 
+        
+        if(!secretWord.includes(letter)) { 
+          errors++; 
+        } 
+        
+        drawHangman(errors); 
+        updateHangmanDisplay(); 
+        checkGameOver(); 
+      }
       
       function updateHangmanDisplay() { 
         document.getElementById('hangman-word-display').innerText = secretWord.split('').map(l => guessedLetters.includes(l) ? l : '_').join(' '); 
@@ -1271,14 +1246,15 @@
         if(step > 5) { c.beginPath(); c.moveTo(110, 140); c.lineTo(140, 180); c.stroke(); }
       }
     </script>
+
     <!-- MOBILE ONLY WARNING OVERLAY -->
-<div id="mobile-warning-overlay">
-    <div class="mobile-warning-card">
-      <i class="fa-solid fa-desktop mobile-warning-icon"></i>
-      <h2>Aviso de Compatibilidade</h2>
-      <p>Este quadro interativo foi desenvolvido para uso em computadores e notebooks.</p>
-      <p>Para aproveitar todas as funcionalidades de desenho e ferramentas, acesse esta página através de um computador. Acesse: dididoingles.github.io/whiteboard-2.0</p>
+    <div id="mobile-warning-overlay">
+      <div class="mobile-warning-card">
+        <i class="fa-solid fa-desktop mobile-warning-icon"></i>
+        <h2>Aviso de Compatibilidade</h2>
+        <p>Este quadro interativo foi desenvolvido para uso em computadores e notebooks.</p>
+        <p>Para aproveitar todas as funcionalidades de desenho e ferramentas, acesse esta página através de um computador.</p>
+      </div>
     </div>
-  </div>
   </body>
 </html>
