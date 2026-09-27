@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Interactive Whiteboard</title>
+    <title>Didi's Whiteboard</title>
     
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
       /* 1. CSS VARIABLES & BASE STYLES*/
@@ -23,7 +26,7 @@
       
       body { 
         margin: 0; 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         background-color: var(--bg-main); 
         color: var(--text-color); 
         overflow: hidden; 
@@ -32,77 +35,205 @@
         height: 100vh; 
       }
 
-      /*  2. NAVIGATION & TOP BAR */
-      .top-bar { 
-        background: var(--primary-red); 
-        color: white; 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        padding: 8px 20px; 
-        font-weight: bold; 
-        flex-shrink: 0; 
+      /*  2. NAVIGATION & TOP BAR (barra única) */
+      .app-header {
+        background: var(--primary-red);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 20px;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 10;
       }
-      
-      .top-bar-left { 
-        display: flex; 
-        align-items: center; 
-        gap: 15px; 
+
+      .brand {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        min-width: 0;
       }
-      
+
+      .brand-title {
+        font-weight: 600;
+        font-size: 15px;
+        white-space: nowrap;
+      }
+
+      .brand-divider {
+        width: 1px;
+        height: 14px;
+        background: rgba(255,255,255,0.35);
+        flex-shrink: 0;
+      }
+
+      .brand-subtitle {
+        font-size: 12px;
+        font-weight: 400;
+        opacity: 0.85;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .mode-switch {
+        display: flex;
+        background: rgba(255,255,255,0.15);
+        border-radius: 999px;
+        padding: 3px;
+        gap: 2px;
+        flex-shrink: 0;
+      }
+
+      .mode-tab {
+        border: none;
+        background: transparent;
+        color: rgba(255,255,255,0.85);
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 7px 16px;
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .mode-tab:hover {
+        color: white;
+      }
+
+      .mode-tab.active {
+        background: white;
+        color: var(--primary-red);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .tool-toggle {
+        display: flex;
+        background: rgba(255,255,255,0.15);
+        border-radius: 999px;
+        padding: 3px;
+        gap: 2px;
+        flex-shrink: 0;
+      }
+
+      .tool-toggle-btn {
+        border: none;
+        background: transparent;
+        color: rgba(255,255,255,0.85);
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .tool-toggle-btn:hover {
+        color: white;
+      }
+
+      .tool-toggle-btn.active {
+        background: white;
+        color: var(--primary-red);
+      }
+
       .tutorial-btn { 
-        background: rgba(255,255,255,0.2); 
-        border: 1px solid rgba(255,255,255,0.3); 
+        background: rgba(255,255,255,0.15); 
+        border: none; 
         color: white; 
         cursor: pointer; 
-        padding: 5px 12px; 
-        border-radius: 20px; 
+        padding: 8px 14px; 
+        border-radius: 999px; 
         font-size: 12px; 
         font-weight: 500; 
-        transition: all 0.2s; 
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+        transition: background 0.2s; 
       }
       
       .tutorial-btn:hover { 
-        background: rgba(255,255,255,0.3); 
-        transform: scale(1.05); 
+        background: rgba(255,255,255,0.28); 
       }
 
-      .nav-tabs { 
-        display: flex; 
-        background: var(--panel-bg); 
-        border-bottom: 1px solid var(--border-color); 
-        justify-content: center; 
-        gap: 20px; 
-        padding: 8px 0; 
-        flex-shrink: 0; 
-      }
-      
-      .tab { 
-        cursor: pointer; 
-        opacity: 0.7; 
-        padding: 6px 16px; 
-        font-weight: 500; 
-        transition: all 0.2s; 
-      }
-      
-      .tab:hover { 
-        opacity: 1; 
-        background: rgba(192,0,0,0.08); 
-        border-radius: 8px; 
-      }
-      
-      .tab.active { 
-        opacity: 1; 
-        border-bottom: 3px solid var(--primary-red); 
-        color: var(--primary-red); 
+      .header-trash-btn {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: white;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        font-size: 14px;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.2s, transform 0.2s;
       }
 
-      
+      .header-trash-btn:hover {
+        background: rgba(255,255,255,0.3);
+        transform: scale(1.08);
+      }
+
+      .header-trash-btn:active {
+        transform: scale(0.96);
+      }
+
+      @media (max-width: 720px) {
+        .brand-subtitle, .brand-divider { display: none; }
+        .tutorial-btn span { display: none; }
+        .tool-toggle-btn span { display: none; }
+      }
+
+      /* ==========================================================================
+         CONTAINER DE TELAS COM TRANSIÇÃO DESLIZANTE
+         ========================================================================== */
+      #screens-wrapper {
+        position: relative;
+        flex-grow: 1;
+        overflow: hidden;
+        width: 100%;
+        display: flex;
+      }
+
+      .screen-slide {
+        width: 100%;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+        will-change: transform;
+      }
+
+      #screens-wrapper.show-game .screen-slide {
+        transform: translateX(-100%);
+      }
+
       #screen-Quadro { 
         display: flex; 
         flex-direction: column; 
-        flex-grow: 1; 
-        overflow: hidden; 
+        overflow: hidden;
       }
       
       #quadro-layout { 
@@ -112,19 +243,100 @@
         position: relative;
       }
       
+      /* ==========================================================================
+         SIDEBAR ESTILO GAVETA
+         ========================================================================== */
+      .nav-drawer-btn {
+        position: fixed;
+        top: 100px;
+        left: -14px;
+        z-index: 1000;
+        background-color: var(--primary-red);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-left: none;
+        padding: 0.6rem 0.8rem 0.6rem 1.2rem;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 3px 0 12px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .nav-drawer-btn:hover {
+        background-color: var(--primary-red-hover);
+        transform: translateX(4px);
+      }
+
+      .nav-drawer-btn.hidden-in-game {
+        display: none !important;
+      }
+
+      .drawer-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        z-index: 1050;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .drawer-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
       #sidebar { 
-        width: 70px; 
+        position: fixed;
+        top: 0;
+        left: -220px;
+        width: 190px;
+        height: 100vh;
         background: var(--panel-bg); 
         border-right: 1px solid var(--border-color); 
         display: flex; 
         flex-direction: column; 
-        align-items: center; 
-        gap: 12px; 
-        padding: 12px 0; 
-        overflow: visible; 
-        flex-shrink: 0;
-        position: relative;
-        z-index: 10;
+        align-items: stretch; 
+        gap: 8px; 
+        padding: 16px 12px; 
+        overflow-y: auto; 
+        overflow-x: hidden;
+        z-index: 1100;
+        transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+      }
+
+      #sidebar.active {
+        left: 0;
+      }
+
+      .drawer-close-container {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: -5px;
+      }
+
+      .drawer-close-sidebar-btn {
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 4px 8px;
+        transition: color 0.2s;
+      }
+
+      .drawer-close-sidebar-btn:hover {
+        color: var(--primary-red);
       }
       
       #canvas-container { 
@@ -143,143 +355,267 @@
         border-radius: 8px; 
         box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
       }
-      
-      #right-controls { 
-        width: 120px; 
-        background: var(--panel-bg); 
-        border-left: 1px solid var(--border-color); 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        gap: 10px; 
-        padding: 12px 6px; 
-        overflow-y: auto; 
-        flex-shrink: 0;
+
+      #canvas-container.text-mode canvas {
+        cursor: text;
       }
 
+      /* ==========================================================================
+         PAINEL DE FORMATAÇÃO DE TEXTO
+         ========================================================================== */
+      #text-format-bar {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-120%);
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        z-index: 50;
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s;
+        pointer-events: none;
+      }
+
+      #text-format-bar.visible {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .fmt-btn {
+        background: transparent;
+        border: 1px solid transparent;
+        color: #444;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+      }
+
+      .fmt-btn:hover {
+        background: #fff0f0;
+        color: var(--primary-red);
+        border-color: #ffe0e0;
+      }
+
+      .fmt-btn.active {
+        background: var(--primary-red);
+        color: white;
+        border-color: var(--primary-red);
+      }
+
+      .fmt-divider {
+        width: 1px;
+        height: 20px;
+        background: var(--border-color);
+        margin: 0 2px;
+      }
+
+      .fmt-color-btn {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        padding: 0;                       
+        box-sizing: border-box;          
+        border-radius: 6px;
+        border: 1px solid transparent;
+        background: transparent;
+        cursor: pointer;
+        display: inline-flex;            
+        align-items: center;
+        justify-content: center;
+        line-height: 0;                    
+        font-size: 0;                     
+        transition: all 0.15s ease;
+      }
+
+      .fmt-color-btn:hover {
+        background: #fff0f0;
+        border-color: #ffe0e0;
+      }
+
+      .fmt-color-btn .color-dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #000000;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+        pointer-events: none;
+      }
+
+      .fmt-color-btn input[type="color"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        border: none;
+      }
+
+      /* Item da Sidebar com texto descritivo */
       .side-item { 
-        font-size: 20px; 
+        font-size: 13px; 
         cursor: pointer; 
-        padding: 10px; 
+        padding: 8px 10px; 
         border: 1px solid #eee; 
-        border-radius: 10px; 
+        border-radius: 8px; 
         background: #fff; 
         transition: all 0.2s; 
         color: #444;
         display: flex;
         align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
+        gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative; 
       }
       
+      .side-item i {
+        font-size: 15px;
+        width: 18px;
+        text-align: center;
+      }
+
       .side-item:hover { 
-        transform: scale(1.08); 
         border-color: var(--primary-red); 
         color: var(--primary-red);
         background: #fff5f5; 
       }
 
-      /* Control Panels & Custom Inputs */
       .control-label {
         font-size: 10px; 
         font-weight: bold; 
         color: #777; 
         text-transform: uppercase;
         margin-top: 4px;
+        margin-bottom: 2px;
+        padding-left: 2px;
       }
 
       .color-picker-wrapper {
         display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 4px;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        margin-bottom: 2px;
+        width: 100%;
       }
 
       .brush-size-container {
-        width: 90%;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 0 4px;
+        box-sizing: border-box;
       }
 
-      .brush-size-container input[type=range] {
+      .brush-size-container input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
         width: 100%;
-        margin: 4px 0;
+        height: 6px;
+        background: linear-gradient(to right,
+          var(--primary-red) 0%,
+          var(--primary-red) var(--fill-percent, 0%),
+          #e0e0e0 var(--fill-percent, 0%),
+          #e0e0e0 100%);
+        border-radius: 3px;
+        outline: none;
+        cursor: pointer;
+        margin: 6px 0;
       }
 
-      .color-grid { 
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: 6px; 
-      }
-      
-      .color-circle { 
-        width: 22px; 
-        height: 22px; 
-        border-radius: 50%; 
-        cursor: pointer; 
-        border: 2px solid transparent; 
-        transition: all 0.2s; 
-      }
-      
-      .color-circle:hover { 
-        transform: scale(1.15); 
-      }
-      
-      .color-circle.active { 
-        border-color: #333; 
-        transform: scale(1.1); 
+      .brush-size-container input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--primary-red);
+        cursor: pointer;
+        transition: transform 0.15s ease, background-color 0.15s ease;
       }
 
-      .action-btn { 
-        width: 92%; 
-        font-weight: bold; 
-        font-size: 10px; 
-        padding: 8px 4px; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        border: 1px solid #ddd; 
-        background: #fff; 
-        transition: all 0.2s; 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-      }
-      
-      .action-btn:hover { 
-        background: #f8f8f8; 
-        border-color: var(--primary-red); 
-        transform: translateY(-1px); 
+      .brush-size-container input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        background: var(--primary-red-hover);
       }
 
-      /* 4. HANGMAN GAME SCREEN (Preserved Unaltered)*/
-      .screen-content { 
-        display: none; 
-        padding: 20px; 
-        max-width: 1000px; 
-        margin: 0 auto; 
-        flex-grow: 1; 
-        overflow-y: auto; 
+      .brush-size-container input[type="range"]::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border: none;
+        border-radius: 50%;
+        background: var(--primary-red);
+        cursor: pointer;
+        transition: transform 0.15s ease, background-color 0.15s ease;
+      }
+
+      .brush-size-container input[type="range"]::-moz-range-thumb:hover {
+        transform: scale(1.2);
+        background: var(--primary-red-hover);
+      }
+
+      /* 4. HANGMAN GAME SCREEN */
+      #screen-Modo-game { 
+        display: flex; 
+        flex-direction: column;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        padding: 40px 24px 48px; 
+        box-sizing: border-box;
       }
       
       .game-container { 
         display: flex; 
-        justify-content: center; 
+        flex-direction: column;
         align-items: center; 
-        gap: 40px; 
-        margin-top: 20px; 
-        background: white; 
-        padding: 20px; 
+        gap: 32px; 
+        margin: 8px auto 0; 
+        background: var(--bg-main); 
+        padding: 40px 36px; 
         border-radius: 12px; 
         box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+        max-width: 1080px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .hangman-word-row {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .hangman-main-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
       }
       
       #hangman-canvas { 
-        background: white; 
+        background: var(--bg-main); 
         border-right: 1px solid #eee; 
-        padding-right: 15px; 
+        padding-right: 24px; 
       }
       
       #hangman-word-display { 
@@ -289,6 +625,14 @@
         font-weight: bold; 
         text-align: center; 
         min-width: 200px; 
+        padding-bottom: 8px;
+        border-bottom: 3px solid var(--border-color);
+      }
+
+      #game-message-area {
+        width: 100%;
+        text-align: center;
+        min-height: 24px;
       }
       
       .keyboard-grid { 
@@ -305,7 +649,7 @@
         border: 1px solid #ddd; 
         cursor: pointer; 
         border-radius: 6px; 
-        background: white; 
+        background: var(--bg-main); 
         font-weight: bold; 
         font-size: 14px; 
         transition: 0.2s; 
@@ -345,7 +689,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
 
-      /*  5. MODALS SYSTEM (Icon Picker, Confirmations, Tutorial)*/
+      /*  5. MODALS SYSTEM */
       .modal-overlay {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
@@ -370,7 +714,7 @@
         max-width: 420px;
         width: 90%;
         max-height: 80vh;
-        overflow-y: auto;
+        overflow-y: hidden;
         padding: 20px;
         box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         transform: scale(0.92);
@@ -414,6 +758,60 @@
         transform: scale(1.1);
       }
 
+      .color-swatch-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        padding: 6px 4px 18px;
+      }
+
+      .color-swatch {
+        position: relative;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .color-swatch:hover {
+        transform: scale(1.15);
+      }
+
+      .color-swatch.selected {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--primary-red);
+      }
+
+      .color-swatch-custom {
+        background: conic-gradient(from 90deg, #ff0000, #ffdd00, #22cc22, #00b0ff, #7a2bff, #ff2fa0, #ff0000);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .color-swatch-custom i {
+        color: white;
+        font-size: 11px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+        pointer-events: none;
+      }
+
+      .color-swatch-custom input[type="color"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        border: none;
+        padding: 0;
+      }
+
       .modal-actions {
         display: flex;
         gap: 10px;
@@ -436,12 +834,20 @@
       .btn-modal-secondary { background: #eee; color: #333; }
       .btn-modal-secondary:hover { background: #e0e0e0; }
 
-      /* Tutorial Specific Lists */
+      .tutorial-section-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 12px 0 6px 0;
+        color: #555;
+        font-size: 13px;
+      }
+
       .shortcut-list { list-style: none; padding: 0; margin: 0; }
+      .shortcut-list li span:first-child { display: flex; align-items: center; gap: 8px; }
       .shortcut-list li { padding: 6px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
       .shortcut-key { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold; color: var(--primary-red); font-size: 11px; }
 
-      /* Toast Notification (Long operations only) */
       .toast-notification {
         position: fixed;
         bottom: 25px;
@@ -463,46 +869,15 @@
         opacity: 1;
       }
 
-      /* 6. RESPONSIVE MOBILE STYLES  */
       @media (max-width: 768px) {
-        #quadro-layout { flex-direction: column; }
-        #sidebar { 
-          width: 70px; 
-          background: var(--panel-bg); 
-          border-right: 1px solid var(--border-color); 
-          display: flex; 
-          flex-direction: column; 
-          align-items: center; 
-          gap: 12px; 
-          padding: 12px 0; 
-          overflow-y: visible; 
-          overflow-x: visible;
-          flex-shrink: 0;
-          position: relative; 
-          z-index: 10; 
-        }
-        #right-controls { 
-          width: 100%; 
-          height: auto; 
-          flex-direction: row; 
-          flex-wrap: wrap; 
-          justify-content: center; 
-          border-left: none; 
-          border-top: 1px solid var(--border-color);
-          padding: 6px;
-        }
-        .color-grid { grid-template-columns: repeat(4, 1fr); }
-        .action-btn { width: auto; padding: 6px 10px; }
-        .game-container { flex-direction: column; gap: 20px; }
-        #hangman-canvas { border-right: none; border-bottom: 1px solid #eee; }
+        .hangman-main-row { flex-direction: column; gap: 20px; }
+        #hangman-canvas { border-right: none; border-bottom: 1px solid #eee; padding-right: 0; padding-bottom: 16px; }
       }
 
-      /* Hide by default on desktops/laptops */
       #mobile-warning-overlay {
         display: none;
       }
 
-      /* Mobile-only overlay trigger */
       @media (max-width: 768px) {
         #mobile-warning-overlay {
           display: flex;
@@ -548,235 +923,151 @@
           line-height: 1.5;
         }
       }
-
-      /* Container that holds all external link icons at the bottom */
-      .sidebar-links-group {
-        margin-top: auto; 
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        align-items: center;
-        padding-bottom: 8px;
-      }
-
-      /* Base style for all sidebar link buttons */
-      .sidebar-link-btn {
-        font-size: 18px;
-        color: #444;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        border: 1px solid #eee;
-        background: #fff;
-        transition: all 0.2s ease;
-      }
-
-      /* Base hover state */
-      .sidebar-link-btn:hover {
-        transform: scale(1.08);
-        border-color: var(--primary-red);
-        color: var(--primary-red);
-        background: #fff5f5;
-      }
-
-      .sidebar-link-btn.youtube:hover { color: #ff0000; border-color: #ff0000; background: #fff0f0; }
-      .sidebar-link-btn.translate:hover { color: #1a73e8; border-color: #1a73e8; background: #f0f6ff; }
-      .sidebar-link-btn.maps:hover { color: #ea4335; border-color: #ea4335; background: #fff0f0; }
-      .sidebar-link-btn.instagram:hover { color: #e1306c; border-color: #e1306c; background: #fff5f8; }
-
-      /* Custom styling for the brush size range slider */
-      .brush-size-container input[type="range"] {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 100%;
-        height: 6px;
-        background: #e0e0e0;
-        border-radius: 3px;
-        outline: none;
-        cursor: pointer;
-      }
-
-      .brush-size-container input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: var(--primary-red);
-        cursor: pointer;
-        transition: transform 0.15s ease, background-color 0.15s ease;
-      }
-
-      .brush-size-container input[type="range"]::-webkit-slider-thumb:hover {
-        transform: scale(1.2);
-        background: var(--primary-red-hover);
-      }
-
-      .brush-size-container input[type="range"]::-moz-range-thumb {
-        width: 16px;
-        height: 16px;
-        border: none;
-        border-radius: 50%;
-        background: var(--primary-red);
-        cursor: pointer;
-        transition: transform 0.15s ease, background-color 0.15s ease;
-      }
-
-      .brush-size-container input[type="range"]::-moz-range-thumb:hover {
-        transform: scale(1.2);
-        background: var(--primary-red-hover);
-      }
-
-      /* Base container positioning for tooltips */
-      .sidebar-link-btn, .side-item {
-        position: relative; 
-      }
-
-      .sidebar-link-btn[data-tooltip]::after,
-      .side-item[data-tooltip]::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        left: 115%;
-        top: 50%;
-        transform: translateY(-50%) translateX(-5px);
-        background-color: #c20000;
-        color: #ffffff;
-        padding: 5px 9px;
-        border-radius: 6px;
-        font-size: 11px;
-        font-weight: 500;
-        white-space: nowrap;
-        pointer-events: none;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.2s ease-in-out;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        z-index: 99999;
-      }
-
-      /* Tooltip positioning specifically tailored for the right-hand sidebar */
-      #right-controls [data-tooltip]::after {
-        right: 115%;
-        left: auto;
-      }
-
-      /* Show on hover */
-      .sidebar-link-btn:hover::after,
-      .side-item:hover::after {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(-50%) translateX(0);
-      }
     </style>
   </head>
   <body>
 
-    <!-- TOP NAVIGATION BAR -->
-    <div class="top-bar">
-      <div class="top-bar-left">
-        <span>Whiteboard 2.0</span>
-        <button class="tutorial-btn" onclick="openModal('tutorialModal')"><i class="fa-solid fa-book-open"></i> Aprenda a usar</button>
+    <!-- Botão Marcador Flutuante da Gaveta -->
+    <button class="nav-drawer-btn" id="openDrawerBtn" aria-label="Abrir barra de ferramentas">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <!-- Overlay da Gaveta -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- SIDEBAR (filha direta do body para não ser afetada pelo transform do slide) -->
+    <div id="sidebar">
+      <div class="drawer-close-container">
+        <button class="drawer-close-sidebar-btn" id="closeDrawerBtn" aria-label="Fechar barra">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
-      <span>@dicarvalho.prof | Educação do futuro</span>
+      
+      <div class="side-item" onclick="openIconModal()"><i class="fa-solid fa-icons"></i> Ícone</div>
+      <div class="side-item" onclick="addCircleFrame()"><i class="fa-regular fa-circle"></i> Destaque</div>
+      <div class="side-item" onclick="openModal('licenseModal')"><i class="fa-solid fa-scale-balanced"></i> Licença</div>
+    
+      <hr style="width: 100%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
+
+      <span class="control-label">Cor do Pincel</span>
+      <div class="color-picker-wrapper">
+        <div class="side-item" onclick="openColorPaletteModal()">
+          <i class="fa-solid fa-palette"></i> Paleta / Cor
+          <input type="color" id="brush-color-picker" value="#000000" onchange="updateBrushFromColorPicker(this.value)" 
+                 tabindex="-1" style="display:none;">
+        </div>
+      </div>
+
+      <span class="control-label">Espessura</span>
+      <div class="brush-size-container">
+        <input type="range" id="brush-size" min="1" max="40" value="3" oninput="updateBrushSize(this.value)">
+      </div>
+
+      <hr style="width: 100%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
+
+      <div class="side-item" onclick="undo()"><i class="fa-solid fa-rotate-left"></i> Desfazer</div>
+      <div class="side-item" onclick="promptDeleteSelected()" style="color: red;"><i class="fa-solid fa-trash-can"></i> Excluir</div>
+      <div class="side-item" onclick="promptClearBoard()"><i class="fa-solid fa-broom"></i> Limpar</div>
+
+      <hr style="width: 100%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
+      <div class="side-item" onclick="downloadCanvas()" style="color: #2e7d32;"><i class="fa-solid fa-download"></i> Baixar</div>
     </div>
 
-    <!-- TABS NAVIGATION -->
-    <div class="nav-tabs">
-      <div class="tab active" onclick="switchTab('Quadro', this)"><i class="fa-solid fa-pen-to-square"></i> whiteboard</div>
-      <div class="tab" onclick="switchTab('Modo-game', this)"><i class="fa-solid fa-gamepad"></i> Game mode</div>
-    </div>
-
-    <!-- MAIN WHITEBOARD SCREEN -->
-    <div id="screen-Quadro">
-      <div id="quadro-layout">
-        <!-- Left Sidebar Tools -->
-        <div id="sidebar">
-          <div class="side-item" onclick="openIconModal()" data-tooltip="Adicionar Ícone"><i class="fa-solid fa-icons"></i></div>
-          <div class="side-item" onclick="addPostIt()" data-tooltip="Post-it"><i class="fa-regular fa-note-sticky"></i></div>
-          <div class="side-item" onclick="addCircleFrame()" data-tooltip="Destaque"><i class="fa-regular fa-circle"></i></div>
-          <div class="side-item" onclick="openModal('licenseModal')" data-tooltip="Termos de Uso / Licença"><i class="fa-solid fa-scale-balanced"></i></div>
-        
-          <!-- EXTERNAL LINKS SECTION -->
-          <div class="sidebar-links-group">
-            <a href="https://images.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn" data-tooltip="Google Imagens">
-              <i class="fa-solid fa-image"></i>
-            </a>
-            <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn youtube" data-tooltip="YouTube">
-              <i class="fa-brands fa-youtube"></i>
-            </a>
-            <a href="https://translate.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn translate" data-tooltip="Google Tradutor">
-              <i class="fa-solid fa-language"></i>
-            </a>
-            <a href="https://maps.google.com/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn maps" data-tooltip="Google Maps">
-              <i class="fa-solid fa-location-dot"></i>
-            </a>
-            <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="sidebar-link-btn instagram" data-tooltip="Siga-nos no Instagram">
-              <i class="fa-brands fa-instagram"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Central Canvas Board -->
-        <div id="canvas-container">
-          <canvas id="whiteboard"></canvas>
-        </div>
-
-        <!-- Right Controls & Brush Customisations -->
-        <div id="right-controls">
-          <span class="control-label">Mais cores</span>
-          <div class="color-picker-wrapper" style="position: relative;">
-            <label for="brush-color-picker" class="side-item" style="width: 32px; height: 32px; padding: 0; cursor: pointer;" data-tooltip="Make your color">
-              <i class="fa-solid fa-palette" style="font-size: 16px;"></i>
-            </label>
-            <input type="color" id="brush-color-picker" value="#000000" onchange="updateBrushFromColorPicker(this.value)" 
-                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
-          </div>
-          
-          <div class="color-grid">
-            <div class="color-circle active" style="background: black;" onclick="updateBrushColor('black', this)"></div>
-            <div class="color-circle" style="background: #c00000;" onclick="updateBrushColor('#c00000', this)"></div>
-            <div class="color-circle" style="background: #3d85c6;" onclick="updateBrushColor('#3d85c6', this)"></div>
-            <div class="color-circle" style="background: #6aa84f;" onclick="updateBrushColor('#6aa84f', this)"></div>
-            <div class="color-circle" style="background: #f1c232;" onclick="updateBrushColor('#f1c232', this)"></div>
-            <div class="color-circle" style="background: #8e7cc3;" onclick="updateBrushColor('#8e7cc3', this)"></div>
-          </div>
-
-          <span class="control-label" onclick="undo()"><i class="fa-solid fa-brush"></i> Size</span>
-          <div class="brush-size-container">
-            <input type="range" id="brush-size" min="1" max="40" value="3" oninput="updateBrushSize(this.value)">
-          </div>
-
-          <hr style="width: 80%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
-
-          <button class="action-btn" onclick="undo()"><i class="fa-solid fa-rotate-left"></i> DESFAZER</button>
-          <button class="action-btn" onclick="promptDeleteSelected()" style="color:red;"><i class="fa-solid fa-trash-can"></i> EXCLUIR</button>
-          <button class="action-btn" onclick="promptClearBoard()"><i class="fa-solid fa-broom"></i> LIMPAR</button>
-
-          <hr style="width: 80%; border: 0; border-top: 1px solid #eee; margin: 4px 0;">
-          <button class="action-btn" onclick="downloadCanvas()" style="background: #eef9ee; border-color: #9cdb9c;"><i class="fa-solid fa-download"></i> BAIXAR</button>
-        </div> <!-- Closes #right-controls -->
-      </div> <!-- Closes #quadro-layout -->
-    </div> <!-- Closes #screen-Quadro -->
-
-    <!-- GAME MODE SCREEN -->
-    <div id="screen-Modo-game" class="screen-content">
-      <div style="text-align: center; margin-bottom: 20px;">
-        <button class="phrase-btn" style="width:auto; padding: 10px 20px; font-weight:bold; background: var(--primary-red); color: white;" onclick="startHangman()">SORTEAR PALAVRA DO QUADRO</button>
+    <!-- UNIFIED APP HEADER -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-title">Whiteboard 2.0</span>
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-subtitle">@dicarvalho.prof</span>
       </div>
-      <div class="game-container">
-        <canvas id="hangman-canvas" width="180" height="220"></canvas>
-        <div>
-           <div id="hangman-word-display">_ _ _ _ _</div>
-           <div id="game-message-area" style="text-align:center; height: 30px; margin-top: 10px;">
-             <p id="game-message" style="font-weight:bold; font-size: 16px; margin:0;"></p>
-           </div>
+
+      <nav class="mode-switch" role="tablist">
+        <button class="mode-tab active" id="tabBoard" onclick="switchTab('Quadro', this)" role="tab" aria-selected="true">
+          <i class="fa-solid fa-pen-to-square"></i> Whiteboard
+        </button>
+        <button class="mode-tab" id="tabGame" onclick="switchTab('Modo-game', this)" role="tab" aria-selected="false">
+          <i class="fa-solid fa-gamepad"></i> Game mode
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <div class="tool-toggle" role="group" aria-label="Modo de ferramenta">
+          <button class="tool-toggle-btn active" id="toolTextBtn" onclick="setToolMode('text')" title="Modo Texto" aria-label="Modo Texto">
+            <i class="fa-solid fa-font"></i>
+          </button>
+          <button class="tool-toggle-btn" id="toolDrawBtn" onclick="setToolMode('draw')" title="Modo Desenho" aria-label="Modo Desenho">
+            <i class="fa-solid fa-pencil"></i>
+          </button>
         </div>
-        <div class="keyboard-grid" id="game-keyboard"></div>
+
+        <button class="header-trash-btn" onclick="promptClearBoard()" aria-label="Limpar quadro" title="Limpar quadro">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <button class="tutorial-btn" onclick="openModal('tutorialModal')">
+          <i class="fa-solid fa-circle-question"></i> <span>Aprenda a usar</span>
+        </button>
       </div>
+    </header>
+
+    <!-- Wrapper que contém as duas telas e faz o deslize -->
+    <div id="screens-wrapper">
+      
+      <!-- MAIN WHITEBOARD SCREEN -->
+      <div id="screen-Quadro" class="screen-slide">
+        <div id="quadro-layout">
+          <div id="canvas-container" class="text-mode">
+            <canvas id="whiteboard"></canvas>
+
+            <!-- Painel de formatação de texto -->
+            <div id="text-format-bar">
+              <button class="fmt-color-btn" id="fmtColorBtn" title="Cor do texto" aria-label="Cor do texto">
+                <span class="color-dot" id="fmtColorDot"></span>
+                <input type="color" id="fmtColorInput" value="#000000">
+              </button>
+
+              <div class="fmt-divider"></div>
+
+              <button class="fmt-btn" id="fmtBold" onclick="toggleTextStyle('bold')" title="Negrito (Ctrl+B)" aria-label="Negrito">
+                <i class="fa-solid fa-bold"></i>
+              </button>
+
+              <button class="fmt-btn" id="fmtItalic" onclick="toggleTextStyle('italic')" title="Itálico (Ctrl+I)" aria-label="Itálico">
+                <i class="fa-solid fa-italic"></i>
+              </button>
+
+              <button class="fmt-btn" id="fmtUnderline" onclick="toggleTextStyle('underline')" title="Sublinhado (Ctrl+U)" aria-label="Sublinhado">
+                <i class="fa-solid fa-underline"></i>
+              </button>
+
+              <button class="fmt-btn" id="fmtStrike" onclick="toggleTextStyle('strikethrough')" title="Tachado" aria-label="Tachado">
+                <i class="fa-solid fa-strikethrough"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAME MODE SCREEN -->
+      <div id="screen-Modo-game" class="screen-slide">
+        <div style="text-align: center; margin-bottom: 36px;">
+          <button class="phrase-btn" style="width:auto; padding: 10px 20px; font-weight:bold; background: var(--primary-red); color: white;" onclick="startHangman()">SORTEAR PALAVRA DO QUADRO</button>
+        </div>
+        <div class="game-container">
+          <div class="hangman-word-row">
+            <div id="hangman-word-display">_ _ _ _ _</div>
+          </div>
+
+          <div class="hangman-main-row">
+            <canvas id="hangman-canvas" width="180" height="220"></canvas>
+            <div class="keyboard-grid" id="game-keyboard"></div>
+          </div>
+
+          <div id="game-message-area">
+            <p id="game-message" style="font-weight:bold; font-size: 16px; margin:0;"></p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- MODAL: Font Awesome Icon Selection -->
@@ -786,6 +1077,41 @@
         <div class="icon-grid" id="icon-picker-grid"></div>
         <div class="modal-actions">
           <button class="btn-modal btn-modal-secondary" onclick="closeModal('iconModal')">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: Color Palette & Custom Color Picker -->
+    <div id="colorPaletteModal" class="modal-overlay" onclick="if(event.target === this) closeModal('colorPaletteModal')">
+      <div class="modal-card" style="max-width: 340px;">
+        <h3><i class="fa-solid fa-palette"></i> Escolha a Cor</h3>
+
+        <div class="color-swatch-grid">
+          <button type="button" class="color-swatch" style="background:#000000" data-color="#000000" onclick="selectColorFromModal('#000000', this)" aria-label="Preto"></button>
+          <button type="button" class="color-swatch" style="background:#555555" data-color="#555555" onclick="selectColorFromModal('#555555', this)" aria-label="Cinza escuro"></button>
+          <button type="button" class="color-swatch" style="background:#999999" data-color="#999999" onclick="selectColorFromModal('#999999', this)" aria-label="Cinza"></button>
+          <button type="button" class="color-swatch" style="background:#ffffff" data-color="#ffffff" onclick="selectColorFromModal('#ffffff', this)" aria-label="Branco"></button>
+          <button type="button" class="color-swatch" style="background:#c20000" data-color="#c20000" onclick="selectColorFromModal('#c20000', this)" aria-label="Vermelho"></button>
+          <button type="button" class="color-swatch" style="background:#ff66b2" data-color="#ff66b2" onclick="selectColorFromModal('#ff66b2', this)" aria-label="Rosa"></button>
+          <button type="button" class="color-swatch" style="background:#ff8800" data-color="#ff8800" onclick="selectColorFromModal('#ff8800', this)" aria-label="Laranja"></button>
+          <button type="button" class="color-swatch" style="background:#ffcc00" data-color="#ffcc00" onclick="selectColorFromModal('#ffcc00', this)" aria-label="Amarelo"></button>
+          <button type="button" class="color-swatch" style="background:#008800" data-color="#008800" onclick="selectColorFromModal('#008800', this)" aria-label="Verde"></button>
+          <button type="button" class="color-swatch" style="background:#00c8a0" data-color="#00c8a0" onclick="selectColorFromModal('#00c8a0', this)" aria-label="Turquesa"></button>
+          <button type="button" class="color-swatch" style="background:#00b0ff" data-color="#00b0ff" onclick="selectColorFromModal('#00b0ff', this)" aria-label="Ciano"></button>
+          <button type="button" class="color-swatch" style="background:#0044cc" data-color="#0044cc" onclick="selectColorFromModal('#0044cc', this)" aria-label="Azul"></button>
+          <button type="button" class="color-swatch" style="background:#3d2bb5" data-color="#3d2bb5" onclick="selectColorFromModal('#3d2bb5', this)" aria-label="Azul índigo"></button>
+          <button type="button" class="color-swatch" style="background:#8800cc" data-color="#8800cc" onclick="selectColorFromModal('#8800cc', this)" aria-label="Roxo"></button>
+          <button type="button" class="color-swatch" style="background:#795548" data-color="#795548" onclick="selectColorFromModal('#795548', this)" aria-label="Marrom"></button>
+          <button type="button" class="color-swatch" style="background:#c8a27a" data-color="#c8a27a" onclick="selectColorFromModal('#c8a27a', this)" aria-label="Bege"></button>
+          
+          <button type="button" class="color-swatch color-swatch-custom" aria-label="Cor personalizada">
+            <i class="fa-solid fa-droplet"></i>
+            <input type="color" id="modal-custom-picker" value="#000000" onchange="selectColorFromModal(this.value, this.closest('.color-swatch'))">
+          </button>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-modal btn-modal-secondary" onclick="closeModal('colorPaletteModal')">Fechar</button>
         </div>
       </div>
     </div>
@@ -805,20 +1131,25 @@
     <!-- MODAL: Tutorial Dialog -->
     <div id="tutorialModal" class="modal-overlay" onclick="if(event.target === this) closeModal('tutorialModal')">
       <div class="modal-card">
-        <h3>🎓 Tutorial Rápido</h3>
+        <h3><i class="fa-solid fa-graduation-cap"></i> Tutorial Rápido</h3>
         
-        <h4 style="margin: 10px 0 6px 0; color: #555; font-size: 13px;">⌨️ Atalhos</h4>
+        <h4 class="tutorial-section-title"><i class="fa-solid fa-keyboard"></i> Atalhos</h4>
         <ul class="shortcut-list">
-          <li><span>✏️ Modo desenho</span><span class="shortcut-key">Ctrl + L</span></li>
-          <li><span>🔍 Modo seleção</span><span class="shortcut-key">Ctrl + S</span></li>
-          <li><span>↩️ Desfazer</span><span class="shortcut-key">Ctrl + Z</span></li>
-          <li><span>🗑️ Excluir</span><span class="shortcut-key">Delete</span></li>
+          <li><span><i class="fa-solid fa-font"></i> Modo texto</span><span class="shortcut-key">Ctrl + T</span></li>
+          <li><span><i class="fa-solid fa-pen"></i> Modo desenho</span><span class="shortcut-key">Ctrl + L</span></li>
+          <li><span><i class="fa-solid fa-bold"></i> Negrito</span><span class="shortcut-key">Ctrl + B</span></li>
+          <li><span><i class="fa-solid fa-italic"></i> Itálico</span><span class="shortcut-key">Ctrl + I</span></li>
+          <li><span><i class="fa-solid fa-underline"></i> Sublinhado</span><span class="shortcut-key">Ctrl + U</span></li>
+          <li><span><i class="fa-solid fa-rotate-left"></i> Desfazer</span><span class="shortcut-key">Ctrl + Z</span></li>
+          <li><span><i class="fa-solid fa-trash-can"></i> Excluir</span><span class="shortcut-key">Delete</span></li>
         </ul>
         
-        <h4 style="margin: 12px 0 6px 0; color: #555; font-size: 13px;">🖱️ Cliques</h4>
+        <h4 class="tutorial-section-title"><i class="fa-solid fa-computer-mouse"></i> Cliques</h4>
         <ul class="shortcut-list">
-          <li><span>📝 Duplo clique</span><span>Adicionar texto</span></li>
-          <li><span>🎨 Cores / Espessura</span><span>Mudar pincel</span></li>
+          <li><span><i class="fa-solid fa-i-cursor"></i> Duplo clique</span><span>Adicionar texto</span></li>
+          <li><span><i class="fa-solid fa-palette"></i> Cores / Espessura</span><span>Mudar pincel</span></li>
+          <li><span><i class="fa-solid fa-computer-mouse"></i> Roda do mouse</span><span>Ajustar espessura (desenho)</span></li>
+          <li><span><i class="fa-solid fa-text-height"></i> Texto selecionado</span><span>Painel de formatação</span></li>
         </ul>
         
         <button class="btn-modal btn-modal-primary" style="width: 100%; margin-top: 15px;" onclick="closeModal('tutorialModal')">Entendi!</button>
@@ -832,10 +1163,10 @@
         
         <div style="text-align: left; font-size: 13px; color: #444; line-height: 1.6; margin: 15px 0;">
           <p style="margin-bottom: 10px;">
-            <strong>✅ Uso Gratuito:</strong> Esta ferramenta é inteiramente gratuita para professores, alunos e educadores utilizarem em suas aulas.
+            <strong><i class="fa-solid fa-circle-check" style="color:#2e7d32;"></i> Uso Gratuito:</strong> Esta ferramenta é inteiramente gratuita para professores, alunos e educadores utilizarem em suas aulas.
           </p>
           <p style="margin-bottom: 0;">
-            <strong>🚫 Proibida a Comercialização:</strong> É estritamente proibida a venda, revenda ou distribuição comercial deste código e software.
+            <strong><i class="fa-solid fa-ban" style="color: var(--primary-red);"></i> Proibida a Comercialização:</strong> É estritamente proibida a venda, revenda ou distribuição comercial deste código e software.
           </p>
         </div>
     
@@ -848,23 +1179,116 @@
 
     <!-- APPLICATION JAVASCRIPT ENGINE -->
     <script>
-      /* ==========================================================================
-         MODULE 1: STATE & CANVAS ENGINE INITIALISATION
-         ========================================================================== */
+      document.addEventListener('DOMContentLoaded', () => {
+        const openDrawerBtn = document.getElementById('openDrawerBtn');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const sidebar = document.getElementById('sidebar');
+
+        function openDrawer() {
+          drawerOverlay.classList.add('active');
+          sidebar.classList.add('active');
+        }
+
+        function closeDrawer() {
+          drawerOverlay.classList.remove('active');
+          sidebar.classList.remove('active');
+        }
+
+        if (openDrawerBtn) openDrawerBtn.addEventListener('click', openDrawer);
+        if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+        if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+      });
+
       let canvas = null;
       let history = [];
+      let currentToolMode = 'text';
+      let lastActiveTextObj = null;
+      let isPickingColor = false;
       const MAX_HISTORY_STEPS = 20;
+      const CANVAS_TEXT_PLACEHOLDER = "Escreva aqui...";
 
       window.addEventListener('load', () => {
         initCanvas();
         setupResizeListener();
         setupKeyboardShortcuts();
         populateIconPicker();
+        updateBrushFill(canvas.freeDrawingBrush.width || 3);
         
-        // Hangman init
         createKeyboard();
         drawHangman(0);
+
+        setToolMode('text');
+        setupFormatColorInput();
+        setupWheelBrushSize();   // ← NOVO: roda do mouse ajusta espessura
       });
+
+      function setupFormatColorInput() {
+        const input = document.getElementById('fmtColorInput');
+        if (!input) return;
+
+        input.addEventListener('mousedown', () => {
+          isPickingColor = true;
+          const active = canvas.getActiveObject();
+          if (active && (active.type === 'textbox' || active.type === 'i-text' || active.type === 'text')) {
+            lastActiveTextObj = active;
+          }
+        });
+
+        input.addEventListener('input', (e) => {
+          applyTextColor(e.target.value);
+          isPickingColor = false;
+        });
+
+        input.addEventListener('change', (e) => {
+          applyTextColor(e.target.value);
+          isPickingColor = false;
+        });
+
+        input.addEventListener('click', () => {
+          setTimeout(() => { isPickingColor = false; }, 400);
+        });
+      }
+
+      // ==========================================================================
+      // RODA DO MOUSE AJUSTA A ESPESSURA DO TRAÇO
+      // - Scroll pra cima: engrossa
+      // - Scroll pra baixo: afina
+      // - Funciona apenas no modo Desenho (isDrawingMode === true)
+      // - Sincroniza o slider da sidebar e o preenchimento vermelho
+      // ==========================================================================
+      function setupWheelBrushSize() {
+        if (!canvas) return;
+
+        canvas.on('mouse:wheel', (opt) => {
+          // Só ajusta se estiver em modo desenho
+          if (!canvas.isDrawingMode) return;
+
+          const e = opt.e;
+          e.preventDefault();
+          e.stopPropagation();
+
+          // deltaY < 0 → scroll para cima → engrossar
+          // deltaY > 0 → scroll para baixo → afinar
+          const step = e.deltaY < 0 ? 1 : -1;
+          const current = canvas.freeDrawingBrush.width || 3;
+          const min = 1;
+          const max = 40;
+          const next = Math.min(Math.max(current + step, min), max);
+
+          if (next === current) return;
+
+          // Aplica a nova espessura no pincel
+          canvas.freeDrawingBrush.width = next;
+
+          // Sincroniza o slider da sidebar e o preenchimento vermelho
+          const slider = document.getElementById('brush-size');
+          if (slider) {
+            slider.value = next;
+            updateBrushFill(next);
+          }
+        });
+      }
 
       function initCanvas() {
         const container = document.getElementById('canvas-container');
@@ -872,7 +1296,7 @@
           width: container.clientWidth - 20,
           height: container.clientHeight - 20,
           backgroundColor: '#ffffff',
-          isDrawingMode: true
+          isDrawingMode: false
         });
 
         canvas.freeDrawingBrush.color = '#000000';
@@ -880,22 +1304,57 @@
 
         canvas.on('mouse:dblclick', (opt) => {
           const pointer = canvas.getPointer(opt.e);
-          
-          const textbox = new fabric.Textbox("Type here...", {
-            left: pointer.x,
-            top: pointer.y,
-            width: 200,
-            fontSize: 24,
-            fill: canvas.freeDrawingBrush.color || '#000000',
-            splitByGrapheme: false,
-            lockUniScaling: true
-          });
+          createTextAt(pointer.x, pointer.y);
+        });
 
-          canvas.add(textbox);
-          canvas.setActiveObject(textbox);
-          canvas.isDrawingMode = false;
-          textbox.enterEditing();
-          textbox.selectAll();
+        canvas.on('mouse:down', (opt) => {
+          if (currentToolMode !== 'text') return;
+          if (opt.target) return;
+          if (canvas.isDrawingMode) return;
+
+          const pointer = canvas.getPointer(opt.e);
+          createTextAt(pointer.x, pointer.y);
+        });
+
+        canvas.on('text:changed', (opt) => {
+          const obj = opt.target;
+          if (obj && obj.isPlaceholder) {
+            obj.isPlaceholder = false;
+            obj.set({ fill: obj.userColor || '#000000', fontStyle: 'normal' });
+            updateTextFormatBar(obj);
+          }
+        });
+
+        canvas.on('text:editing:exited', (opt) => {
+          const obj = opt.target;
+          if (obj && obj.isPlaceholder) {
+            canvas.remove(obj);
+            canvas.renderAll();
+          }
+        });
+
+        canvas.on('selection:created', (opt) => {
+          const obj = opt.selected[0];
+          if (obj && (obj.type === 'textbox' || obj.type === 'i-text' || obj.type === 'text')) {
+            lastActiveTextObj = obj;
+          }
+          updateTextFormatBar(obj);
+        });
+        canvas.on('selection:updated', (opt) => {
+          const obj = opt.selected[0];
+          if (obj && (obj.type === 'textbox' || obj.type === 'i-text' || obj.type === 'text')) {
+            lastActiveTextObj = obj;
+          }
+          updateTextFormatBar(obj);
+        });
+        canvas.on('selection:cleared', () => {
+          if (isPickingColor) return;
+          lastActiveTextObj = null;
+          hideTextFormatBar();
+        });
+
+        canvas.on('text:editing:entered', (opt) => {
+          updateTextFormatBar(opt.target);
         });
 
         canvas.on('object:added', pushHistoryState);
@@ -903,6 +1362,156 @@
         canvas.on('object:removed', pushHistoryState);
         
         pushHistoryState();
+      }
+
+      function getActiveTextObject() {
+        const active = canvas.getActiveObject();
+        if (active && (active.type === 'textbox' || active.type === 'i-text' || active.type === 'text')) {
+          return active;
+        }
+        if (lastActiveTextObj && canvas.getObjects().includes(lastActiveTextObj)) {
+          return lastActiveTextObj;
+        }
+        return null;
+      }
+
+      function updateTextFormatBar(textObj) {
+        const bar = document.getElementById('text-format-bar');
+        if (!textObj || (textObj.type !== 'textbox' && textObj.type !== 'i-text' && textObj.type !== 'text')) {
+          hideTextFormatBar();
+          return;
+        }
+
+        if (textObj.isPlaceholder) {
+          hideTextFormatBar();
+          return;
+        }
+
+        bar.classList.add('visible');
+
+        document.getElementById('fmtBold').classList.toggle('active', textObj.fontWeight === 'bold');
+        document.getElementById('fmtItalic').classList.toggle('active', textObj.fontStyle === 'italic');
+        document.getElementById('fmtUnderline').classList.toggle('active', !!textObj.underline);
+        document.getElementById('fmtStrike').classList.toggle('active', !!textObj.linethrough);
+
+        const color = textObj.fill || '#000000';
+        document.getElementById('fmtColorDot').style.background = color;
+        document.getElementById('fmtColorInput').value = normalizeHex(color);
+      }
+
+      function hideTextFormatBar() {
+        document.getElementById('text-format-bar').classList.remove('visible');
+      }
+
+      function applyTextColor(hex) {
+        let textObj = canvas.getActiveObject();
+        if (!textObj || (textObj.type !== 'textbox' && textObj.type !== 'i-text' && textObj.type !== 'text')) {
+          textObj = lastActiveTextObj;
+        }
+        if (!textObj || !canvas.getObjects().includes(textObj)) return;
+
+        textObj.isPlaceholder = false;
+        textObj.set('fill', hex);
+        textObj.userColor = hex;
+        textObj.dirty = true;
+
+        canvas.setActiveObject(textObj);
+        canvas.requestRenderAll();
+        textObj.setCoords();
+
+        pushHistoryState();
+
+        document.getElementById('fmtColorDot').style.background = hex;
+        document.getElementById('fmtColorInput').value = normalizeHex(hex);
+        updateTextFormatBar(textObj);
+      }
+
+      function toggleTextStyle(style) {
+        const textObj = getActiveTextObject();
+        if (!textObj) return;
+
+        switch (style) {
+          case 'bold':
+            textObj.set('fontWeight', textObj.fontWeight === 'bold' ? 'normal' : 'bold');
+            break;
+          case 'italic':
+            textObj.set('fontStyle', textObj.fontStyle === 'italic' ? 'normal' : 'italic');
+            break;
+          case 'underline':
+            textObj.set('underline', !textObj.underline);
+            break;
+          case 'strikethrough':
+            textObj.set('linethrough', !textObj.linethrough);
+            break;
+        }
+
+        textObj.dirty = true;
+        canvas.requestRenderAll();
+        textObj.setCoords();
+        pushHistoryState();
+        updateTextFormatBar(textObj);
+      }
+
+      function normalizeHex(color) {
+        if (!color) return '#000000';
+        if (color.startsWith('#')) {
+          return color.length === 4
+            ? '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3]
+            : color;
+        }
+        const m = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        if (m) {
+          const toHex = n => parseInt(n, 10).toString(16).padStart(2, '0');
+          return '#' + toHex(m[1]) + toHex(m[2]) + toHex(m[3]);
+        }
+        return '#000000';
+      }
+
+      function createTextAt(x, y) {
+        const brushColor = canvas.freeDrawingBrush.color || '#000000';
+
+        const textbox = new fabric.Textbox(CANVAS_TEXT_PLACEHOLDER, {
+          left: x,
+          top: y,
+          width: 200,
+          fontSize: 24,
+          fontFamily: 'Poppins, sans-serif',
+          fill: '#a0a0a0',
+          fontStyle: 'italic',
+          splitByGrapheme: false,
+          lockUniScaling: true
+        });
+        textbox.isPlaceholder = true;
+        textbox.userColor = brushColor;
+
+        canvas.add(textbox);
+        canvas.setActiveObject(textbox);
+        canvas.isDrawingMode = false;
+        textbox.enterEditing();
+        setTimeout(() => { textbox.selectAll(); }, 0);
+      }
+
+      function setToolMode(mode) {
+        currentToolMode = mode;
+        const drawBtn = document.getElementById('toolDrawBtn');
+        const textBtn = document.getElementById('toolTextBtn');
+        const container = document.getElementById('canvas-container');
+
+        if (mode === 'draw') {
+          drawBtn.classList.add('active');
+          textBtn.classList.remove('active');
+          canvas.isDrawingMode = true;
+          container.classList.remove('text-mode');
+          hideTextFormatBar();
+        } else {
+          drawBtn.classList.remove('active');
+          textBtn.classList.add('active');
+          canvas.isDrawingMode = false;
+          canvas.discardActiveObject();
+          canvas.renderAll();
+          container.classList.add('text-mode');
+          hideTextFormatBar();
+        }
       }
 
       canvas?.on('object:scaling', (e) => {
@@ -952,9 +1561,6 @@
         });
       }
 
-      /* ==========================================================================
-         MODULE 2: HISTORY STACK & TOOL OPERATIONS
-         ========================================================================== */
       function pushHistoryState() {
         if (!canvas || !canvas.toJSON) return;
         history.push(JSON.stringify(canvas));
@@ -988,6 +1594,8 @@
             canvas.renderAll();
             history = [];
             pushHistoryState();
+            hideTextFormatBar();
+            lastActiveTextObj = null;
           }
         );
       }
@@ -1002,48 +1610,65 @@
           () => {
             activeObjects.forEach(obj => canvas.remove(obj));
             canvas.discardActiveObject().renderAll();
+            hideTextFormatBar();
+            lastActiveTextObj = null;
           }
         );
+      }
+
+      function openColorPaletteModal() {
+        const current = (canvas.freeDrawingBrush.color || '#000000').toLowerCase();
+        document.querySelectorAll('.color-swatch[data-color]').forEach(sw => {
+          sw.classList.toggle('selected', sw.dataset.color.toLowerCase() === current);
+        });
+        openModal('colorPaletteModal');
+      }
+
+      function selectColorFromModal(hex, el) {
+        updateBrushColor(hex);
+        document.querySelectorAll('.color-swatch').forEach(sw => sw.classList.remove('selected'));
+        if (el) el.classList.add('selected');
+        closeModal('colorPaletteModal');
       }
 
       function updateBrushFromColorPicker(hex) {
         updateBrushColor(hex);
       }
 
-      function updateBrushColor(colorHex, element = null) {
-        canvas.isDrawingMode = true;
+      function updateBrushColor(colorHex) {
         canvas.freeDrawingBrush.color = colorHex;
-
         const validHex = colorHex.startsWith('#') ? colorHex : '#000000';
-        document.getElementById('brush-color-picker').value = validHex;
-
-        document.querySelectorAll('.color-circle').forEach(el => el.classList.remove('active'));
-        if (element) {
-          element.classList.add('active');
-        }
+        const picker = document.getElementById('brush-color-picker');
+        if (picker) picker.value = validHex;
+        const modalPicker = document.getElementById('modal-custom-picker');
+        if (modalPicker) modalPicker.value = validHex;
       }
 
       function updateBrushSize(size) {
-        canvas.isDrawingMode = true;
-        canvas.freeDrawingBrush.width = parseInt(size, 10) || 3;
+        const px = parseInt(size, 10) || 3;
+        canvas.freeDrawingBrush.width = px;
+        updateBrushFill(px);
       }
 
-      function addPostIt() {
-        canvas.add(new fabric.Rect({ 
-          width: 120, height: 120, fill: '#ffcccc', opacity: 0.8, left: 100, top: 100 
-        }));
-        canvas.isDrawingMode = false;
+      function updateBrushFill(px) {
+        const slider = document.getElementById('brush-size');
+        if (!slider) return;
+        const min = parseFloat(slider.min) || 1;
+        const max = parseFloat(slider.max) || 40;
+        const clamped = Math.min(Math.max(px, min), max);
+        const percent = ((clamped - min) / (max - min)) * 100;
+        slider.style.setProperty('--fill-percent', percent + '%');
       }
 
       function addCircleFrame() {
         canvas.add(new fabric.Circle({ 
           radius: 40, fill: 'transparent', stroke: 'red', strokeWidth: 3, left: 150, top: 150 
         }));
-        canvas.isDrawingMode = false;
+        setToolMode('draw');
       }
 
       function downloadCanvas() {
-        showLongOperationToast("⏳ Gerando imagem para download...");
+        showLongOperationToast("Gerando imagem para download...");
         setTimeout(() => {
           const link = document.createElement('a');
           link.download = 'aula-whiteboard.png';
@@ -1052,9 +1677,6 @@
         }, 1100);
       }
 
-      /* ==========================================================================
-         MODULE 3: FONT AWESOME ICON PICKER & MODALS SYSTEM
-         ========================================================================== */
       const AVAILABLE_ICONS = [
         'fa-star', 'fa-heart', 'fa-thumbs-up', 'fa-check', 'fa-xmark', 
         'fa-question', 'fa-lightbulb', 'fa-graduation-cap', 'fa-book', 'fa-pencil',
@@ -1095,7 +1717,7 @@
         });
 
         canvas.add(iconText);
-        canvas.isDrawingMode = false;
+        setToolMode('draw');
       }
 
       function openModal(id) {
@@ -1127,27 +1749,51 @@
 
       function setupKeyboardShortcuts() {
         window.addEventListener('keydown', (e) => {
+          const confirmModal = document.getElementById('confirmModal');
+          if (confirmModal.classList.contains('active') && e.key === 'Enter') {
+            e.preventDefault();
+            const confirmBtn = document.getElementById('confirmModalActionBtn');
+            if (confirmBtn) confirmBtn.click();
+            return;
+          }
+
           const activeObj = canvas ? canvas.getActiveObject() : null;
           const isEditingText = activeObj && activeObj.isEditing;
           if (document.activeElement.tagName === "INPUT" || isEditingText) return;
 
-          if (e.ctrlKey && e.key.toLowerCase() === 'l') { e.preventDefault(); canvas.isDrawingMode = true; }
-          if (e.ctrlKey && e.key.toLowerCase() === 's') { e.preventDefault(); canvas.isDrawingMode = false; }
+          if (e.ctrlKey && e.key.toLowerCase() === 't') { e.preventDefault(); setToolMode('text'); }
+          if (e.ctrlKey && e.key.toLowerCase() === 'l') { e.preventDefault(); setToolMode('draw'); }
           if (e.key === "Delete") { promptDeleteSelected(); }
           if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
         });
       }
 
       function switchTab(name, el) { 
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
+        document.querySelectorAll('.mode-tab').forEach(t => { 
+          t.classList.remove('active'); 
+          t.setAttribute('aria-selected', 'false'); 
+        }); 
         el.classList.add('active'); 
-        document.querySelectorAll('[id^="screen-"]').forEach(s => s.style.display = 'none'); 
-        document.getElementById('screen-' + name).style.display = (name === 'Quadro') ? 'flex' : 'block'; 
+        el.setAttribute('aria-selected', 'true'); 
+
+        const wrapper = document.getElementById('screens-wrapper');
+        if (name === 'Modo-game') {
+          wrapper.classList.add('show-game');
+        } else {
+          wrapper.classList.remove('show-game');
+        }
+
+        const drawerBtn = document.getElementById('openDrawerBtn');
+        if (name === 'Modo-game') {
+          drawerBtn.classList.add('hidden-in-game');
+          document.getElementById('sidebar').classList.remove('active');
+          document.getElementById('drawerOverlay').classList.remove('active');
+          hideTextFormatBar();
+        } else {
+          drawerBtn.classList.remove('hidden-in-game');
+        }
       }
 
-      /* ==========================================================================
-         MODULE 4: HANGMAN GAME ENGINE
-         ========================================================================== */
       let secretWord = "", guessedLetters = [], errors = 0, usedWords = [];
 
       function createKeyboard() { 
@@ -1165,7 +1811,7 @@
       function startHangman() {
         const allTexts = canvas.getObjects().filter(obj => (obj.type === 'text' || obj.type === 'i-text' || obj.type === 'textbox') && obj.text.trim().length > 0);
         if (allTexts.length === 0) { 
-          openConfirmModal("Modo Game", "Escreva algumas palavras no quadro primeiro para jogar!", () => {});
+          openConfirmModal("Modo Game", "Quadro vazio. Esta aplicação não considera palavras escritas no modo desenho, apenas modo texto.", () => {});
           return; 
         }
 
@@ -1224,10 +1870,10 @@
         const msg = document.getElementById('game-message');
         const isWin = secretWord && !document.getElementById('hangman-word-display').innerText.includes('_');
         if(errors >= 6) { 
-          msg.innerHTML = `Pratique mais! 😉 A palavra era: <strong>${secretWord}</strong>`;
+          msg.innerHTML = `Pratique mais! A palavra era: <strong>${secretWord}</strong>`;
         }
         else if(isWin) { 
-          msg.innerText = "Parabéns! 🎉"; 
+          msg.innerText = "Parabéns!"; 
           msg.style.color = "green";
         }
       }
